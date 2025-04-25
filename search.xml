@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Coding Diary(2025-4-24)</title>
+      <link href="/blogs/2025/04/24/Coding%20Diary(2025-4-24)/"/>
+      <url>/blogs/2025/04/24/Coding%20Diary(2025-4-24)/</url>
+      
+        <content type="html"><![CDATA[<p>最近这两天也算搞了点有意思的，除了不想学习，其他干啥都有意思，笑死了。</p><p>走通了怎么在 Mac 上用虚拟机装 NAS，不得不说还是有点成就感的，就是这个公网确实是有点烦躁，搞不出公网访问，看看周末有没有时间再搞一搞。</p><p>我用的是飞牛的系统，不得不说作为一个开源的系统确实是看上去很不错，很简单，能直接用。相关的具体流程，包括踩了什么坑之类的打算开一个 NAS 相关的文档去写，这里就不写了。</p><p>除了 NAS，今天也算是把我这个 blog 网站的搜索功能加上了，用的本地搜索，搜索速度还是很快的。</p><p>这两天尽量把那个 intern 的自动测试给整出来，总是不想做，😮‍💨。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Coding Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 日记 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>主流 AI 实际使用体验（组合学答题方面）</title>
       <link href="/blogs/2025/04/22/%E4%B8%BB%E6%B5%81%20AI%20%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C%EF%BC%88%E7%BB%84%E5%90%88%E5%AD%A6%E7%AD%94%E9%A2%98%E6%96%B9%E9%9D%A2%EF%BC%89/"/>
       <url>/blogs/2025/04/22/%E4%B8%BB%E6%B5%81%20AI%20%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C%EF%BC%88%E7%BB%84%E5%90%88%E5%AD%A6%E7%AD%94%E9%A2%98%E6%96%B9%E9%9D%A2%EF%BC%89/</url>
@@ -170,7 +195,7 @@
       
         <tags>
             
-            <tag> MLSys </tag>
+            <tag> 日记 </tag>
             
         </tags>
       

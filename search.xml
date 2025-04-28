@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>学习日志(2025-4-25)</title>
+      <link href="/blogs/2025/04/25/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97(2025-4-25)/"/>
+      <url>/blogs/2025/04/25/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97(2025-4-25)/</url>
+      
+        <content type="html"><![CDATA[<p>今天终于看完了 UCSD 的 CSE 234 的 <a href="https://mlsysbook.ai/contents/core/dnn_architectures/dnn_architectures.html">required reading 1.2</a>，足足一章，确实是内容很多，主要就是介绍了目前的四种主流模型，MLP、CNN、RNN 和 Transformer。确实算得上是详略得当，refresh my memory again。后面还有一些计算方面的介绍，虽然没有很深入，确实不错。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Study Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 日记 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Coding Diary(2025-4-24)</title>
       <link href="/blogs/2025/04/24/Coding%20Diary(2025-4-24)/"/>
       <url>/blogs/2025/04/24/Coding%20Diary(2025-4-24)/</url>

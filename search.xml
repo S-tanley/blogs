@@ -8,7 +8,7 @@
       <link href="/blogs/2025/04/29/Coding%20Diary(2025-4-29)/"/>
       <url>/blogs/2025/04/29/Coding%20Diary(2025-4-29)/</url>
       
-        <content type="html"><![CDATA[<p>继续我的 docker。</p><p>之前遇到一个报错：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">Error: Failed to launch the browser process! undefined<br><br>[579:579:0430/015358.567760:ERROR:zygote_host_impl_linux.cc(105)] Running as root without --no-sandbox is not supported. See https://crbug.com/638180.<br><br><br><br><br><br>TROUBLESHOOTING: https://pptr.dev/troubleshooting<br><br><br><br> ❯ ChildProcess.onClose node_modules/@puppeteer/browsers/src/launch.ts:507:11<br><br><br><br>⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯<br><br><br><br><br><br> Test Files  1 failed (1)<br><br>      Tests  2 skipped (2)<br><br>   Start at  01:53:46<br><br>   Duration  12.37s (transform 815ms, setup 0ms, collect 3.88s, tests 4.55s, environment 2ms, prepare 573ms)<br><br><br><br>npm notice<br><br>npm notice New major version of npm available! 10.8.2 -&gt; 11.3.0<br><br>npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.3.0<br><br>npm notice To update run: npm install -g npm@11.3.0<br><br>npm notice<br></code></pre></td></tr></table></figure><p>Gemini 说是因为浏览器的问题。</p><p>正常我们在一个 docker image 里，我们都是 root，但是这个 Chromium 不允许我们以 root 的身份去运行。</p><p>然后他给出来了两个解决办法，一个就是改 vitest 的配置，我首先选择是改这个 vitest 的配置，但是改完之后还是报错，要继续改，好像是因为新版的 vitest 要用新的写法之类的，要改的太多了，我就直接去用另外一个方法了。</p><p>另外一个方法就是，更改用户的身份，不是 root 就行了。这个就是改了改 <code>dockerfile</code>。</p><p>用的命令是</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">docker build --platform=linux/amd64 -t my-test-env:dev .<br></code></pre></td></tr></table></figure><p>和</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">docker run -it --rm --platform=linux/amd64 -v &quot;$(pwd):/app&quot; -v /app/node_modules my-test-env:dev bash<br></code></pre></td></tr></table></figure><p>还是报错</p><img src="./Coding Diary(2025-4-29)/CleanShot 2025-04-29 at 22.03.32@2x.png" alt="CleanShot 2025-04-29 at 22.03.32@2x" style="zoom:75%;" /><p>我就试了一下直接下载</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">npx puppeteer browsers install chrome<br></code></pre></td></tr></table></figure><p>继续报错</p><img src="./Coding Diary(2025-4-29)/CleanShot 2025-04-29 at 22.11.28@2x.png" alt="CleanShot 2025-04-29 at 22.11.28@2x" style="zoom:80%;" /><p>询问 Gemini，告诉我还是要改 vitest 分配置文件，兜兜转转又回去了，离谱。</p><p>这次改完之后可以运行了，但是遇到了下一个报错，timeout。</p><p>专门去搜了下文档，改了一下默认时间。</p>]]></content>
+        <content type="html"><![CDATA[<p>继续我的 docker。</p><p>之前遇到一个报错：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">Error: Failed to launch the browser process! undefined<br><br>[579:579:0430/015358.567760:ERROR:zygote_host_impl_linux.cc(105)] Running as root without --no-sandbox is not supported. See https://crbug.com/638180.<br><br><br><br><br><br>TROUBLESHOOTING: https://pptr.dev/troubleshooting<br><br><br><br> ❯ ChildProcess.onClose node_modules/@puppeteer/browsers/src/launch.ts:507:11<br><br><br><br>⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯<br><br><br><br><br><br> Test Files  1 failed (1)<br><br>      Tests  2 skipped (2)<br><br>   Start at  01:53:46<br><br>   Duration  12.37s (transform 815ms, setup 0ms, collect 3.88s, tests 4.55s, environment 2ms, prepare 573ms)<br><br><br><br>npm notice<br><br>npm notice New major version of npm available! 10.8.2 -&gt; 11.3.0<br><br>npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.3.0<br><br>npm notice To update run: npm install -g npm@11.3.0<br><br>npm notice<br></code></pre></td></tr></table></figure><p>Gemini 说是因为浏览器的问题。</p><p>正常我们在一个 docker image 里，我们都是 root，但是这个 Chromium 不允许我们以 root 的身份去运行。</p><p>然后他给出来了两个解决办法，一个就是改 vitest 的配置，我首先选择是改这个 vitest 的配置，但是改完之后还是报错，要继续改，好像是因为新版的 vitest 要用新的写法之类的，要改的太多了，我就直接去用另外一个方法了。</p><p>另外一个方法就是，更改用户的身份，不是 root 就行了。这个就是改了改 <code>dockerfile</code>。</p><p>用的命令是</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">docker build --platform=linux/amd64 -t my-test-env:dev .<br></code></pre></td></tr></table></figure><p>和</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">docker run -it --rm --platform=linux/amd64 -v &quot;$(pwd):/app&quot; -v /app/node_modules my-test-env:dev bash<br></code></pre></td></tr></table></figure><p>还是报错</p><img src="./Coding Diary(2025-4-29)/CleanShot 2025-04-29 at 22.03.32@2x.png" alt="CleanShot 2025-04-29 at 22.03.32@2x" style="zoom:75%;" /><p>我就试了一下直接下载</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">npx puppeteer browsers install chrome<br></code></pre></td></tr></table></figure><p>继续报错</p><img src="./Coding Diary(2025-4-29)/CleanShot 2025-04-29 at 22.11.28@2x.png" alt="CleanShot 2025-04-29 at 22.11.28@2x" style="zoom:80%;" /><p>询问 Gemini，告诉我还是要改 vitest 配置文件，兜兜转转又回去了，离谱。</p><p>这次改完之后可以运行了，但是遇到了下一个报错，timeout。</p><p>专门去搜了下文档，改了一下默认时间。</p><p>但是继续 timeout。</p><p>那这感觉就有很多可能性了。</p>]]></content>
       
       
       <categories>
@@ -483,6 +483,31 @@
     
     
     <entry>
+      <title>一个 CS 大三学生的碎碎念</title>
+      <link href="/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89CS%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/"/>
+      <url>/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89CS%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/</url>
+      
+        <content type="html"><![CDATA[<p>在这里随便写点东西，做一个小小的总结吧。</p><p>感觉这三年学了很多东西，但还是很迷茫，不知道以后应该干什么。马上就大四了，感觉工作也找不到，博士也很难伸到，暑研也伸不到，唯一感觉做的比较好的就是绩点维持的挺好，而且大部分课都是有比较认真的学，确实是会了一些东西，但感觉都很理论，也不知道怎么用。找工作的时候需要的技术栈基本都不会，或者只会一点皮毛，真的遇到大型项目就啥也不会，也无从下手；找 research 也是，要读很多导师方向的论文，感觉之前学的一些东西也基本用不上，就感觉很多东西都匹配不上。但其实也没什么可抱怨的，毕竟感觉自己确实是有点三天打鱼两天晒网，很多东西想要自学但是从没有坚持做完过，虽然已经快大四了，感觉再开始自学一些东西已经有点晚了，但还是希望自己在最后一年真的完整的自学完几门网课，毕竟现在感觉已经明确了自己未来的方向了，就不能在松懈了。</p><p>最近也看到了很多大佬的总结，感觉大部分都是大一大二就已经很强，至少也是有明确道路了，空闲时间大部分都在提升自己的技术。我大一的时候在想，刚上大学，不用对自己太苛刻。应该只有在上大学之前的暑假系统的学了一下C语言，又因为要 transfer，要学托福，这个占用了很多的时间，包括大一到大二的暑假，还有大二的寒假。最后 transfer 来到 UW-Madison，还是很喜欢这个学校的，发现学业压力甚至更重了，因为要上很多之前上过的课，我又傻傻的 double 了一个 STAT 的 major。其实根本不应该 double，当时觉得学一学 STAT 的课很不错，但其实 CS 有那么多的方向可以去学，真的没必要再去涉猎 STAT。于是乎，现在就导致我没有一门精的。</p><p>25 Spring 这个学期可以说是我压力最大的一个学期，因为我找了一个 remote intern，还有一个 remote research。但是发现如果去找工，自己的技术根本不够用，但是又因为这个 intern 占据了我一定的时间，再加上学业上真的压力很重，我这个学期连续5周，每周至少一个 midterm，放了一个一周的 Spring break，回来之后又是连着两周有考试，在之后两周就就是 final。Remote research 导师人也很放羊，但不得不说导师我感觉人很好了，毕竟我确实啥也不会，也愿意跟我meeting 一下，给我一些 paper list，虽然也不花太多时间吧，但我感觉还是挺好的。这样毕竟压力很小，导致我基本没有进展，因为更多的时间都花在了另外两项上。如果硬要说的话，一天我差不多有 10 - 12 个小时是可以用来做事情的，如果这 10 - 12 个小时，我一分钟都不玩，我觉得确实可以同时 handle 这三项，但是太难了，我唯一的娱乐就是踢球，或者看小说，真的确实是做不到一点娱乐都没有。这就导致确实没办法平衡好，😮‍💨，还是太菜了。而且我这个 remote intern，给我的心里压力比较大，虽然我当时就是随机投了一个，然后也是 unpaid，但是当时确实是有承诺会好好做，感觉也没有做的很好，有的时候就感觉压力很大，因为会有自己没有说到做到的内疚。</p><p>但毕竟也不是完全没有收获，我感觉至少我未来的学习方向清晰了一点，要系统的学一学前端；其次就是学一学 HPC，disturbed sys，并行计算方向的课程；最后就是从假期开始每日一题，在做题的同时学一学算法。</p><p>这个暑假一定要好好利用好💪，不能在空耗时间了，给自己狠狠的立 flag。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Life Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 随笔 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>建立个人 Blog 网站</title>
       <link href="/blogs/2025/03/25/%E5%BB%BA%E7%AB%8B%E4%B8%AA%E4%BA%BABlog%E7%BD%91%E7%AB%99/"/>
       <url>/blogs/2025/03/25/%E5%BB%BA%E7%AB%8B%E4%B8%AA%E4%BA%BABlog%E7%BD%91%E7%AB%99/</url>
@@ -502,31 +527,6 @@
             <tag> Web </tag>
             
             <tag> Personal Blog Website </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>一个 CS 大三学生的碎碎念</title>
-      <link href="/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89CS%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/"/>
-      <url>/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89CS%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/</url>
-      
-        <content type="html"><![CDATA[<p>在这里随便写点东西，做一个小小的总结吧。</p><p>感觉这三年学了很多东西，但还是很迷茫，不知道以后应该干什么。马上就大四了，感觉工作也找不到，博士也很难伸到，暑研也伸不到，唯一感觉做的比较好的就是绩点维持的挺好，而且大部分课都是有比较认真的学，确实是会了一些东西，但感觉都很理论，也不知道怎么用。找工作的时候需要的技术栈基本都不会，或者只会一点皮毛，真的遇到大型项目就啥也不会，也无从下手；找 research 也是，要读很多导师方向的论文，感觉之前学的一些东西也基本用不上，就感觉很多东西都匹配不上。但其实也没什么可抱怨的，毕竟感觉自己确实是有点三天打鱼两天晒网，很多东西想要自学但是从没有坚持做完过，虽然已经快大四了，感觉再开始自学一些东西已经有点晚了，但还是希望自己在最后一年真的完整的自学完几门网课，毕竟现在感觉已经明确了自己未来的方向了，就不能在松懈了。</p><p>最近也看到了很多大佬的总结，感觉大部分都是大一大二就已经很强，至少也是有明确道路了，空闲时间大部分都在提升自己的技术。我大一的时候在想，刚上大学，不用对自己太苛刻。应该只有在上大学之前的暑假系统的学了一下C语言，又因为要 transfer，要学托福，这个占用了很多的时间，包括大一到大二的暑假，还有大二的寒假。最后 transfer 来到 UW-Madison，还是很喜欢这个学校的，发现学业压力甚至更重了，因为要上很多之前上过的课，我又傻傻的 double 了一个 STAT 的 major。其实根本不应该 double，当时觉得学一学 STAT 的课很不错，但其实 CS 有那么多的方向可以去学，真的没必要再去涉猎 STAT。于是乎，现在就导致我没有一门精的。</p><p>25 Spring 这个学期可以说是我压力最大的一个学期，因为我找了一个 remote intern，还有一个 remote research。但是发现如果去找工，自己的技术根本不够用，但是又因为这个 intern 占据了我一定的时间，再加上学业上真的压力很重，我这个学期连续5周，每周至少一个 midterm，放了一个一周的 Spring break，回来之后又是连着两周有考试，在之后两周就就是 final。Remote research 导师人也很放羊，但不得不说导师我感觉人很好了，毕竟我确实啥也不会，也愿意跟我meeting 一下，给我一些 paper list，虽然也不花太多时间吧，但我感觉还是挺好的。这样毕竟压力很小，导致我基本没有进展，因为更多的时间都花在了另外两项上。如果硬要说的话，一天我差不多有 10 - 12 个小时是可以用来做事情的，如果这 10 - 12 个小时，我一分钟都不玩，我觉得确实可以同时 handle 这三项，但是太难了，我唯一的娱乐就是踢球，或者看小说，真的确实是做不到一点娱乐都没有。这就导致确实没办法平衡好，😮‍💨，还是太菜了。而且我这个 remote intern，给我的心里压力比较大，虽然我当时就是随机投了一个，然后也是 unpaid，但是当时确实是有承诺会好好做，感觉也没有做的很好，有的时候就感觉压力很大，因为会有自己没有说到做到的内疚。</p><p>但毕竟也不是完全没有收获，我感觉至少我未来的学习方向清晰了一点，要系统的学一学前端；其次就是学一学 HPC，disturbed sys，并行计算方向的课程；最后就是从假期开始每日一题，在做题的同时学一学算法。</p><p>这个暑假一定要好好利用好💪，不能在空耗时间了，给自己狠狠的立 flag。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Life Blogs </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 随笔 </tag>
             
         </tags>
       

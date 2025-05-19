@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Coding Diary(2025-5-19)</title>
+      <link href="/blogs/2025/05/19/Coding%20Diary(2025-5-19)/"/>
+      <url>/blogs/2025/05/19/Coding%20Diary(2025-5-19)/</url>
+      
+        <content type="html"><![CDATA[<p>感觉我这个也不算是 coding diary，主要是就是技术方面的日志，好久没有写代码了。</p><p>这两天把服务器搞好了，虽然非常离谱的卖家已读不回，但毕竟啥都有，都能开机，就把我的 2080 ti 22 G 显卡直接装上开机了，声音是真的大，不得不说。第一次装显卡，真是小心翼翼的，一点都不敢乱动，而且还发现金手指背面倒数第二根少一块，真是吓死我了，我心思我这么轻的插拔都能有问题吗，还好搜完之后发现就是这么设计的。</p><p>ubuntu server 的安装也是非常简单，总体来讲都是一样的，就是把系统烧到一个 U 盘里，然后进 bios，选择启动盘，就 ok 了，整个过程都是比较 smooth 的。然后有一堆设置，就问 GPT 就完事了。</p><p>今天非常惨的一点是，我整 NAS，然后网太慢，就喊联通的来整网络，结果路由器整没了一个，相当于网关换了一个，直接连不上了，笑死了，然后我之前还整的静态内网 ip，直接完蛋，重装系统了直接。不过飞牛这个重装系统还是很好的，基本啥都没丢，因为他可以只格式化系统盘，所以原来的数据都还在，只要重新挂载一下就行。我之前备份的照片什么，还有外接硬盘里的电影啥的都在，就是昨天下的电影好像出问题了，给它删了，今天重新下一下试一试。</p><p>现在又买了一个网线，一个 switcher。等着到时候把服务器什么都放在车库了，希望到时候也会很好用👍。我还想加装硬盘来着，就是说不给机会，实在是没钱了。服务器我还想加装内存，感觉内存也不怎么值钱。</p><p>查了一下，发现天塌了，我现在是 4 条 8 G 内存，按我的想法是要上 32 G 内存，这样我可以慢慢加，这家伙直接没法用了，更天塌的是，我要是上 8 条 32 G 的内存的话，要 1600 大洋，现在拿不出来一点，😮‍💨。更天塌的是，我最好可以一下子上 8 条，否则下次再装更难受。因为我这个离谱服务器，电源版在一半的主板上面，也就是说要把电源板给卸下来，才能装内存，也就是我最好可以一下子装 8 条。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Coding Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 日记 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Mac 好用的命令行工具总结</title>
       <link href="/blogs/2025/05/16/caffeinate%20%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/"/>
       <url>/blogs/2025/05/16/caffeinate%20%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</url>
@@ -533,7 +558,7 @@
       <link href="/blogs/2025/03/26/GitHub%20%E5%AE%9E%E7%8E%B0%E5%A4%9A%20page%20sit/"/>
       <url>/blogs/2025/03/26/GitHub%20%E5%AE%9E%E7%8E%B0%E5%A4%9A%20page%20sit/</url>
       
-        <content type="html"><![CDATA[<p>如果你是用通过网上搜到的一些教程去GitHub上实现你自己的个人主页的话，你可能会发现大家都会强调你把你的GitHub <a href="http://xn--repousername-2f5sj66da50p6z3d3n2i.github.io">repo的名字命名为username.github.io</a>。但实际上你可以在任意把任意的repo设置成你的项目主页，网上你可以搜到几个相关GitHub设置多page的帖子，随便放在这里<a href="https://segmentfault.com/a/1190000003946969">一个</a>，感兴趣可以去再看看。</p><p>总之，如果你只想把你基于Hexo的blog deploy到GitHub的话，很简单，只需要改两个config。</p><p>在你的 <code>_config.yml</code> 文件里，把 <code>url</code> 改成 <code>https://&lt;username&gt;.github.io/&lt;reponame&gt;</code>。然后再加一个 <code>root</code> , 这个填成 <code>/&lt;reponame&gt;/</code> 。其他就正常配置就好了。</p><img src="./GitHub实现多page sit/CleanShot 2025-03-26 at 15.23.34.png" alt="CleanShot 2025-03-26 at 15.23.34" style="zoom:70%;" /><p>我唯一遇到的，可能会出问题的地方，是在那个page setting那里。</p><img src="./GitHub实现多page sit/CleanShot 2025-03-26 at 15.31.56.png" alt="CleanShot 2025-03-26 at 15.31.56" style="zoom:67%;" /><p>这里可能不能用GitHub action，不过我也不确定，但我之前调到GitHub action的时候会出问题。如果你发现你deploy到github上之后，他并没有生成一个page site，你可以试一试把这个改一下。</p><p>这就是全部内容了，希望对你有用。</p>]]></content>
+        <content type="html"><![CDATA[<p>如果你是用通过网上搜到的一些教程去 GitHub 上实现你自己的个人主页的话，你可能会发现大家都会强调你把你的 GitHub repo 的名字命名为<code>username.github.io</code>。但实际上你可以在任意把任意的 repo 设置成你的项目主页，网上你可以搜到几个相关 GitHub 设置多 page 的帖子，随便放在这里<a href="https://segmentfault.com/a/1190000003946969">一个</a>，感兴趣可以去再看看。</p><p>总之，如果你只想把你基于 Hexo 的 blog deploy 到 GitHub 的话，很简单，只需要改两个 config。</p><p>在你的 <code>_config.yml</code> 文件里，把 <code>url</code> 改成 <code>https://&lt;username&gt;.github.io/&lt;reponame&gt;</code>。然后再加一个 <code>root</code> , 这个填成 <code>/&lt;reponame&gt;/</code> 。其他就正常配置就好了。</p><img src="./GitHub实现多page sit/CleanShot 2025-03-26 at 15.23.34.png" alt="CleanShot 2025-03-26 at 15.23.34" style="zoom:70%;" /><p>我唯一遇到的，可能会出问题的地方，是在那个 page setting 那里。</p><img src="./GitHub实现多page sit/CleanShot 2025-03-26 at 15.31.56.png" alt="CleanShot 2025-03-26 at 15.31.56" style="zoom:67%;" /><p>这里可能不能用 GitHub action，不过我也不确定，但我之前调到 GitHub action 的时候会出问题。如果你发现你 deploy 到 github 上之后，他并没有生成一个 page site，你可以试一试把这个改一下。</p><p>这就是全部内容了，希望对你有用。</p>]]></content>
       
       
       <categories>

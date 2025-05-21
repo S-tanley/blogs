@@ -79,6 +79,31 @@
     
     
     <entry>
+      <title>Reading Notes for Orca</title>
+      <link href="/blogs/2025/05/15/Orca/"/>
+      <url>/blogs/2025/05/15/Orca/</url>
+      
+        <content type="html"><![CDATA[<p>This is the reading notes for the <em>ORCA: A Distributed Serving System for Transformer-Based Generative Models</em>. This is an OSDI conference paper from 2022. Almost all the authors come from South Korea, and actually, this is the first time I have read papers written by Koreans.</p><h1>Summary</h1><h2 id="Abstract-Introduction-Background">Abstract &amp; Introduction &amp; Background</h2><p>The paper is focused on the inference serving, they point out that the existing system is not good enough for transformer-based models. So, they propose a new method called <strong>iteration-level scheduling</strong>, and create a distributed system called <strong>ORCA</strong>.</p><h1>Thoughts</h1><p>The paper is kind of old, I think nowadays the support for the LLM inference is very sophisticated. I know two mainstream open-source projects focus on this area: vLLm and SGLang. I actually know some developers of SGLang. However, in this paper, none of them is mentioned 😂. I think this is because the paper is kind of old, and for the framework it mentions, I actually have no idea.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Reading Paper </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MLSys </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>300 元 Mac mini 秒变家用 NAS</title>
       <link href="/blogs/2025/05/07/300%20%E5%85%83%20Mac%20mini%20%E7%A7%92%E5%8F%98%E5%AE%B6%E7%94%A8%20Nas/"/>
       <url>/blogs/2025/05/07/300%20%E5%85%83%20Mac%20mini%20%E7%A7%92%E5%8F%98%E5%AE%B6%E7%94%A8%20Nas/</url>
@@ -254,16 +279,16 @@
     
     
     <entry>
-      <title>学习日志(2025-4-20)</title>
-      <link href="/blogs/2025/04/20/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97(2025-4-20)%20/"/>
-      <url>/blogs/2025/04/20/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97(2025-4-20)%20/</url>
+      <title>生活日志(2025-4-20)</title>
+      <link href="/blogs/2025/04/20/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%BF%97(2025-4-20)/"/>
+      <url>/blogs/2025/04/20/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%BF%97(2025-4-20)/</url>
       
-        <content type="html"><![CDATA[<p>今天上午踢了个球，基本上剩下的时间都在写这个 CS 525 的 HW5，写的真是头晕脑胀的，但不得不说感觉一些概念稍微清晰了一些，本来还打算读一读 UCSD 的 CSE 234 的 required reading，但感觉确实是学不动了。</p><p>本来踢完球应该洗个澡，但是当时想着晚上稍微早点回来，然后洗澡睡觉，但是被 Kan 拖住了，一直在图书馆。不得不说又发现了一个好地方，memorial library 的 computer lab，全是很好的显示器，晚上还没人，还里 domain 或者 route A bus stop 近，天选自习室。哎，啥时候国内也能有这样子的地方就太好了。</p><p>STAT 333 的 HW4 扣了 40 分，足足 40%，因为直接少了一块 visualization 的部分，下次在写这个作业我一定要小心，仔细读好要求。</p><p>感觉还是挺充实的，但是我的 intern 又没时间搞了，明天还要写 Math 475 的 take-home midterm 2，这个也是非常离谱的大作业，要花很长时间去慢慢做。</p><p>哎，情感上又遇到了大挫折，不过这是学习日志，就不在这里写了。</p>]]></content>
+        <content type="html"><![CDATA[<p>最近其实过的还挺正常的，也不能说正常吧，这两天算是重回正轨，室友被警察抓走了，还去保释他，也算是人生阅历又 +1 了。</p><p>不过认识了 Kan，然后现在基本每天都约着去图书馆，可以说是效率比较高了。</p><p>但是悲伤的事情就又来了，小鱼要跟我分手，真的一想到就好伤心好伤心，感觉她现在就像我生活中的底色一样，淡淡的，浅浅的，忙起来你就会忽视，但她一直都在。其实最开始就能感觉到她非常饱满情绪，她会表达出来，但我不会。我一直追求的平和的生活，似乎过于平和了，我希望我可以不情绪化，不管面对任何事都不情绪化，最后发现我好像已经丧失情绪化这个功能了。我好悲伤，但是只有刚想起来那一阵最为心痛，再之后这种情感好像就变淡了，可是这能说明我内心深处不珍视这段感情吗，可是如果这样的话我为什么这么舍不得呢？我不知道，感觉我也不会得到答案了。</p>]]></content>
       
       
       <categories>
           
-          <category> Study Blogs </category>
+          <category> Life Blogs </category>
           
       </categories>
       
@@ -279,16 +304,16 @@
     
     
     <entry>
-      <title>生活日志(2025-4-20)</title>
-      <link href="/blogs/2025/04/20/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%BF%97(2025-4-20)/"/>
-      <url>/blogs/2025/04/20/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%BF%97(2025-4-20)/</url>
+      <title>学习日志(2025-4-20)</title>
+      <link href="/blogs/2025/04/20/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97(2025-4-20)%20/"/>
+      <url>/blogs/2025/04/20/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97(2025-4-20)%20/</url>
       
-        <content type="html"><![CDATA[<p>最近其实过的还挺正常的，也不能说正常吧，这两天算是重回正轨，室友被警察抓走了，还去保释他，也算是人生阅历又 +1 了。</p><p>不过认识了 Kan，然后现在基本每天都约着去图书馆，可以说是效率比较高了。</p><p>但是悲伤的事情就又来了，小鱼要跟我分手，真的一想到就好伤心好伤心，感觉她现在就像我生活中的底色一样，淡淡的，浅浅的，忙起来你就会忽视，但她一直都在。其实最开始就能感觉到她非常饱满情绪，她会表达出来，但我不会。我一直追求的平和的生活，似乎过于平和了，我希望我可以不情绪化，不管面对任何事都不情绪化，最后发现我好像已经丧失情绪化这个功能了。我好悲伤，但是只有刚想起来那一阵最为心痛，再之后这种情感好像就变淡了，可是这能说明我内心深处不珍视这段感情吗，可是如果这样的话我为什么这么舍不得呢？我不知道，感觉我也不会得到答案了。</p>]]></content>
+        <content type="html"><![CDATA[<p>今天上午踢了个球，基本上剩下的时间都在写这个 CS 525 的 HW5，写的真是头晕脑胀的，但不得不说感觉一些概念稍微清晰了一些，本来还打算读一读 UCSD 的 CSE 234 的 required reading，但感觉确实是学不动了。</p><p>本来踢完球应该洗个澡，但是当时想着晚上稍微早点回来，然后洗澡睡觉，但是被 Kan 拖住了，一直在图书馆。不得不说又发现了一个好地方，memorial library 的 computer lab，全是很好的显示器，晚上还没人，还里 domain 或者 route A bus stop 近，天选自习室。哎，啥时候国内也能有这样子的地方就太好了。</p><p>STAT 333 的 HW4 扣了 40 分，足足 40%，因为直接少了一块 visualization 的部分，下次在写这个作业我一定要小心，仔细读好要求。</p><p>感觉还是挺充实的，但是我的 intern 又没时间搞了，明天还要写 Math 475 的 take-home midterm 2，这个也是非常离谱的大作业，要花很长时间去慢慢做。</p><p>哎，情感上又遇到了大挫折，不过这是学习日志，就不在这里写了。</p>]]></content>
       
       
       <categories>
           
-          <category> Life Blogs </category>
+          <category> Study Blogs </category>
           
       </categories>
       
@@ -558,7 +583,7 @@
       <link href="/blogs/2025/03/26/GitHub%20%E5%AE%9E%E7%8E%B0%E5%A4%9A%20page%20sit/"/>
       <url>/blogs/2025/03/26/GitHub%20%E5%AE%9E%E7%8E%B0%E5%A4%9A%20page%20sit/</url>
       
-        <content type="html"><![CDATA[<p>如果你是用通过网上搜到的一些教程去 GitHub 上实现你自己的个人主页的话，你可能会发现大家都会强调你把你的 GitHub repo 的名字命名为<code>username.github.io</code>。但实际上你可以在任意把任意的 repo 设置成你的项目主页，网上你可以搜到几个相关 GitHub 设置多 page 的帖子，随便放在这里<a href="https://segmentfault.com/a/1190000003946969">一个</a>，感兴趣可以去再看看。</p><p>总之，如果你只想把你基于 Hexo 的 blog deploy 到 GitHub 的话，很简单，只需要改两个 config。</p><p>在你的 <code>_config.yml</code> 文件里，把 <code>url</code> 改成 <code>https://&lt;username&gt;.github.io/&lt;reponame&gt;</code>。然后再加一个 <code>root</code> , 这个填成 <code>/&lt;reponame&gt;/</code> 。其他就正常配置就好了。</p><img src="./GitHub 实现多 page sit/CleanShot 2025-03-26 at 15.23.34.png" alt="CleanShot 2025-03-26 at 15.23.34" style="zoom:70%;" /><p>我唯一遇到的，可能会出问题的地方，是在那个 page setting 那里。</p><img src="./GitHub 实现多 page sit/CleanShot 2025-03-26 at 15.31.56.png" alt="CleanShot 2025-03-26 at 15.31.56" style="zoom:67%;" /><p>这里可能不能用 GitHub action，不过我也不确定，但我之前调到 GitHub action 的时候会出问题。如果你发现你 deploy 到 github 上之后，他并没有生成一个 page site，你可以试一试把这个改一下。</p><p>这就是全部内容了，希望对你有用。</p>]]></content>
+        <content type="html"><![CDATA[<p>如果你是用通过网上搜到的一些教程去 GitHub 上实现你自己的个人主页的话，你可能会发现大家都会强调你把你的 GitHub repo 的名字命名为 <code>username.github.io</code>。但实际上你可以在任意把任意的 repo 设置成你的项目主页，网上你可以搜到几个相关 GitHub 设置多 page 的帖子，随便放在这里<a href="https://segmentfault.com/a/1190000003946969">一个</a>，感兴趣可以去再看看。</p><p>总之，如果你只想把你基于 Hexo 的 blog deploy 到 GitHub 的话，很简单，只需要改两个 config。</p><p>在你的 <code>_config.yml</code> 文件里，把 <code>url</code> 改成 <code>https://&lt;username&gt;.github.io/&lt;reponame&gt;</code>。然后再加一个 <code>root</code> , 这个填成 <code>/&lt;reponame&gt;/</code> 。其他就正常配置就好了。</p><img src="./GitHub 实现多 page sit/CleanShot 2025-03-26 at 15.23.34.png" alt="CleanShot 2025-03-26 at 15.23.34" style="zoom:70%;" /><p>我唯一遇到的，可能会出问题的地方，是在那个 page setting 那里。</p><img src="./GitHub 实现多 page sit/CleanShot 2025-03-26 at 15.31.56.png" alt="CleanShot 2025-03-26 at 15.31.56" style="zoom:67%;" /><p>这里可能不能用 GitHub action，不过我也不确定，但我之前调到 GitHub action 的时候会出问题。如果你发现你 deploy 到 github 上之后，他并没有生成一个 page site，你可以试一试把这个改一下。</p><p>这就是全部内容了，希望对你有用。</p>]]></content>
       
       
       <categories>

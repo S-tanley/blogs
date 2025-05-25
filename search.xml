@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Linux 系统硬件信息检查命令总结</title>
+      <link href="/blogs/2025/05/22/Linux%20%E7%B3%BB%E7%BB%9F%E7%A1%AC%E4%BB%B6%E4%BF%A1%E6%81%AF%E6%A3%80%E6%9F%A5%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/"/>
+      <url>/blogs/2025/05/22/Linux%20%E7%B3%BB%E7%BB%9F%E7%A1%AC%E4%BB%B6%E4%BF%A1%E6%81%AF%E6%A3%80%E6%9F%A5%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</url>
+      
+        <content type="html"><![CDATA[<p>本文档总结了在 Linux 系统中查看各种硬件组件信息的常用命令。这些命令通常需要在终端中执行。</p><hr><h2 id="CPU-信息-🧠">CPU 信息 🧠</h2><ul><li><strong><code>lscpu</code></strong>: 显示 CPU 架构、核心数、线程数、速度、缓存等详细信息。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">lscpu<br></code></pre></td></tr></table></figure></li><li><strong><code>cat /proc/cpuinfo</code></strong>: 查看更详细的 CPU 底层信息，每个逻辑核心都会有条目。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> /proc/cpuinfo<br></code></pre></td></tr></table></figure></li><li><strong>通过 <code>dmidecode</code> 查看处理器详情</strong> (通常需要 <code>sudo</code>):  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> dmidecode -t processor<br></code></pre></td></tr></table></figure></li></ul><hr><h2 id="内存-RAM-信息-💾">内存 (RAM) 信息 💾</h2><ul><li><strong><code>free -h</code></strong>: 以人类可读格式显示总内存、已用、可用内存及交换空间情况。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">free -h<br></code></pre></td></tr></table></figure></li><li><strong><code>cat /proc/meminfo</code></strong>: 查看详细的内存使用和内核统计信息。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> /proc/meminfo<br></code></pre></td></tr></table></figure></li><li><strong><code>sudo dmidecode -t memory</code></strong> 或 <strong><code>sudo dmidecode -t 17</code></strong>: 查看每个物理内存条的详细信息，如制造商、型号、序列号、容量、速度、类型 (DDR4)、Rank、是否支持 ECC 等。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> dmidecode -t memory<br></code></pre></td></tr></table></figure></li><li><strong><code>sudo lshw -class memory -short</code></strong>: 简要列出内存子系统信息。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> lshw -class memory -short<br></code></pre></td></tr></table></figure></li></ul><hr><h2 id="硬盘-存储设备信息-HDD-SSD-💿">硬盘/存储设备信息 (HDD/SSD) 💿</h2><ul><li><strong><code>lsblk</code></strong>: 以树状结构显示块设备（硬盘、分区、LVM、loop 设备等）。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">lsblk<br><span class="hljs-comment"># 推荐用法，显示型号和是否为旋转磁盘 (ROTA=1 为 HDD, ROTA=0 为 SSD)</span><br>lsblk -o NAME,SIZE,TYPE,MODEL,ROTA<br></code></pre></td></tr></table></figure></li><li><strong><code>df -h</code></strong>: 显示已挂载文件系统的磁盘空间使用情况。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">df</span> -h<br></code></pre></td></tr></table></figure></li><li><strong><code>sudo fdisk -l</code></strong>: 列出所有磁盘及其分区表信息（MBR 或 GPT）。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> fdisk -l<br></code></pre></td></tr></table></figure></li><li><strong><code>sudo lshw -class disk</code></strong>: 显示详细的磁盘硬件信息，包括产品型号、供应商等。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> lshw -class disk<br></code></pre></td></tr></table></figure></li><li><strong><code>sudo smartctl -a /dev/sdx</code></strong>: 查看指定磁盘 (将 <code>/dev/sdx</code> 替换为实际设备名，如 <code>/dev/sda</code> 或 <code>/dev/nvme0n1</code>) 的 S.M.A.R.T. 健康状况和详细参数。需要先安装 <code>smartmontools</code> (<code>sudo apt install smartmontools</code>)。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> smartctl -a /dev/sda<br></code></pre></td></tr></table></figure></li><li><strong>针对 NVMe SSD</strong>:<ul><li><code>sudo nvme list</code>: 列出所有 NVMe SSD。</li><li><code>sudo nvme smart-log /dev/nvme0n1</code>: 查看特定 NVMe SSD 的健康日志 (替换设备名)。</li><li>需要先安装 <code>nvme-cli</code> (<code>sudo apt install nvme-cli</code>)。</li></ul></li></ul><hr><h2 id="网卡-网络接口-信息-🌐">网卡 (网络接口) 信息 🌐</h2><ul><li><strong><code>ip addr show</code></strong> 或 <strong><code>ip a</code></strong>: 显示所有网络接口的配置，包括 IP 地址、MAC 地址、状态等。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">ip a<br></code></pre></td></tr></table></figure></li><li><strong><code>lspci -k | grep -i -E &quot;ethernet|network&quot;</code></strong>: 查看 PCI 总线上的网络控制器及其正在使用的内核驱动。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">lspci -k | grep -i -E <span class="hljs-string">&quot;ethernet|network&quot;</span><br></code></pre></td></tr></table></figure></li><li><strong><code>sudo lshw -class network</code></strong>: 显示详细的网络硬件报告，包括型号、供应商、速度能力等。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> lshw -class network<br></code></pre></td></tr></table></figure></li><li><strong><code>sudo ethtool &lt;interface_name&gt;</code></strong>: 查看特定网络接口 (如 <code>eno1</code>) 的详细设置、支持的链路模式、当前速度、双工模式等。需要先安装 <code>ethtool</code> (<code>sudo apt install ethtool</code>)。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> ethtool eno1<br></code></pre></td></tr></table></figure></li></ul><hr><h2 id="GPU-显卡-信息-🖥️">GPU (显卡) 信息 🖥️</h2><ul><li><strong><code>lspci | grep -i -E &quot;vga|3d|display|nvidia|amd|radeon|graphics&quot;</code></strong>: 初步判断系统是否识别到 GPU 作为 PCI 设备，并查看其型号。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">lspci | grep -i -E <span class="hljs-string">&quot;vga|3d|display|nvidia|amd|radeon|graphics&quot;</span><br></code></pre></td></tr></table></figure></li><li><strong>针对 NVIDIA GPU</strong>:<ul><li><code>nvidia-smi</code>: 显示 NVIDIA GPU 的详细状态，包括驱动版本、温度、显存使用、GPU 利用率等。需要已正确安装 NVIDIA 驱动。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">nvidia-smi<br></code></pre></td></tr></table></figure></li></ul></li><li><strong><code>sudo lshw -class display</code></strong>: 显示系统识别到的显示控制器的详细信息。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> lshw -class display<br></code></pre></td></tr></table></figure></li></ul><hr><h2 id="其他硬件信息-🛠️">其他硬件信息 🛠️</h2><ul><li><strong><code>lsusb</code></strong>: 列出所有 USB 总线和连接的 USB 设备。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">lsusb<br></code></pre></td></tr></table></figure></li><li><strong><code>sudo dmidecode</code></strong>: 显示所有 DMI (Desktop Management Interface) 信息，包含主板、BIOS、系统、机箱等非常全面的硬件底层数据。  <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> dmidecode<br><span class="hljs-comment"># 查看主板型号</span><br><span class="hljs-built_in">sudo</span> dmidecode -t baseboard<br><span class="hljs-comment"># 查看BIOS信息</span><br><span class="hljs-built_in">sudo</span> dmidecode -t bios<br></code></pre></td></tr></table></figure></li><li><strong><code>sudo lshw</code></strong>: (List Hardware) 一个综合性的硬件信息查看工具，可以提供非常详细的硬件配置报告。<ul><li>安装：<code>sudo apt install lshw</code></li><li>查看简要信息：<code>sudo lshw -short</code></li><li>生成 HTML 报告：<code>sudo lshw -html &gt; hardware_report.html</code></li></ul></li></ul><hr><p><strong>注意:</strong> 很多命令（特别是直接访问硬件底层信息的，如 <code>dmidecode</code>, <code>lshw</code>, <code>smartctl</code>, <code>nvme</code>, <code>fdisk</code>, <code>ethtool</code>）需要使用 <code>sudo</code> 以管理员权限运行才能获取完整信息。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Tech Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Tools </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Coding Diary(2025-5-19)</title>
       <link href="/blogs/2025/05/19/Coding%20Diary(2025-5-19)/"/>
       <url>/blogs/2025/05/19/Coding%20Diary(2025-5-19)/</url>
@@ -279,16 +304,16 @@
     
     
     <entry>
-      <title>生活日志(2025-4-20)</title>
-      <link href="/blogs/2025/04/20/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%BF%97(2025-4-20)/"/>
-      <url>/blogs/2025/04/20/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%BF%97(2025-4-20)/</url>
+      <title>学习日志(2025-4-20)</title>
+      <link href="/blogs/2025/04/20/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97(2025-4-20)%20/"/>
+      <url>/blogs/2025/04/20/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97(2025-4-20)%20/</url>
       
-        <content type="html"><![CDATA[<p>最近其实过的还挺正常的，也不能说正常吧，这两天算是重回正轨，室友被警察抓走了，还去保释他，也算是人生阅历又 +1 了。</p><p>不过认识了 Kan，然后现在基本每天都约着去图书馆，可以说是效率比较高了。</p><p>但是悲伤的事情就又来了，小鱼要跟我分手，真的一想到就好伤心好伤心，感觉她现在就像我生活中的底色一样，淡淡的，浅浅的，忙起来你就会忽视，但她一直都在。其实最开始就能感觉到她非常饱满情绪，她会表达出来，但我不会。我一直追求的平和的生活，似乎过于平和了，我希望我可以不情绪化，不管面对任何事都不情绪化，最后发现我好像已经丧失情绪化这个功能了。我好悲伤，但是只有刚想起来那一阵最为心痛，再之后这种情感好像就变淡了，可是这能说明我内心深处不珍视这段感情吗，可是如果这样的话我为什么这么舍不得呢？我不知道，感觉我也不会得到答案了。</p>]]></content>
+        <content type="html"><![CDATA[<p>今天上午踢了个球，基本上剩下的时间都在写这个 CS 525 的 HW5，写的真是头晕脑胀的，但不得不说感觉一些概念稍微清晰了一些，本来还打算读一读 UCSD 的 CSE 234 的 required reading，但感觉确实是学不动了。</p><p>本来踢完球应该洗个澡，但是当时想着晚上稍微早点回来，然后洗澡睡觉，但是被 Kan 拖住了，一直在图书馆。不得不说又发现了一个好地方，memorial library 的 computer lab，全是很好的显示器，晚上还没人，还里 domain 或者 route A bus stop 近，天选自习室。哎，啥时候国内也能有这样子的地方就太好了。</p><p>STAT 333 的 HW4 扣了 40 分，足足 40%，因为直接少了一块 visualization 的部分，下次在写这个作业我一定要小心，仔细读好要求。</p><p>感觉还是挺充实的，但是我的 intern 又没时间搞了，明天还要写 Math 475 的 take-home midterm 2，这个也是非常离谱的大作业，要花很长时间去慢慢做。</p><p>哎，情感上又遇到了大挫折，不过这是学习日志，就不在这里写了。</p>]]></content>
       
       
       <categories>
           
-          <category> Life Blogs </category>
+          <category> Study Blogs </category>
           
       </categories>
       
@@ -304,16 +329,16 @@
     
     
     <entry>
-      <title>学习日志(2025-4-20)</title>
-      <link href="/blogs/2025/04/20/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97(2025-4-20)%20/"/>
-      <url>/blogs/2025/04/20/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97(2025-4-20)%20/</url>
+      <title>生活日志(2025-4-20)</title>
+      <link href="/blogs/2025/04/20/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%BF%97(2025-4-20)/"/>
+      <url>/blogs/2025/04/20/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%BF%97(2025-4-20)/</url>
       
-        <content type="html"><![CDATA[<p>今天上午踢了个球，基本上剩下的时间都在写这个 CS 525 的 HW5，写的真是头晕脑胀的，但不得不说感觉一些概念稍微清晰了一些，本来还打算读一读 UCSD 的 CSE 234 的 required reading，但感觉确实是学不动了。</p><p>本来踢完球应该洗个澡，但是当时想着晚上稍微早点回来，然后洗澡睡觉，但是被 Kan 拖住了，一直在图书馆。不得不说又发现了一个好地方，memorial library 的 computer lab，全是很好的显示器，晚上还没人，还里 domain 或者 route A bus stop 近，天选自习室。哎，啥时候国内也能有这样子的地方就太好了。</p><p>STAT 333 的 HW4 扣了 40 分，足足 40%，因为直接少了一块 visualization 的部分，下次在写这个作业我一定要小心，仔细读好要求。</p><p>感觉还是挺充实的，但是我的 intern 又没时间搞了，明天还要写 Math 475 的 take-home midterm 2，这个也是非常离谱的大作业，要花很长时间去慢慢做。</p><p>哎，情感上又遇到了大挫折，不过这是学习日志，就不在这里写了。</p>]]></content>
+        <content type="html"><![CDATA[<p>最近其实过的还挺正常的，也不能说正常吧，这两天算是重回正轨，室友被警察抓走了，还去保释他，也算是人生阅历又 +1 了。</p><p>不过认识了 Kan，然后现在基本每天都约着去图书馆，可以说是效率比较高了。</p><p>但是悲伤的事情就又来了，小鱼要跟我分手，真的一想到就好伤心好伤心，感觉她现在就像我生活中的底色一样，淡淡的，浅浅的，忙起来你就会忽视，但她一直都在。其实最开始就能感觉到她非常饱满情绪，她会表达出来，但我不会。我一直追求的平和的生活，似乎过于平和了，我希望我可以不情绪化，不管面对任何事都不情绪化，最后发现我好像已经丧失情绪化这个功能了。我好悲伤，但是只有刚想起来那一阵最为心痛，再之后这种情感好像就变淡了，可是这能说明我内心深处不珍视这段感情吗，可是如果这样的话我为什么这么舍不得呢？我不知道，感觉我也不会得到答案了。</p>]]></content>
       
       
       <categories>
           
-          <category> Study Blogs </category>
+          <category> Life Blogs </category>
           
       </categories>
       

@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Coding Diary(2025-7-8)</title>
+      <link href="/blogs/2025/07/08/Coding%20Diary(2025-7-8)/"/>
+      <url>/blogs/2025/07/08/Coding%20Diary(2025-7-8)/</url>
+      
+        <content type="html"><![CDATA[<p>又是好久没写了，训练模型训的确实是非常头痛啊，在这里做一些版本描述，虽然理论上 yaml 里面都是有描述，但是毕竟如果你要一个一个点开看太麻烦了。</p><p><strong>1.0.18</strong>，<strong>1.1.5</strong>，<strong>1.3.9</strong> 这几个都是为了 catch loss jump 训练的。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Coding Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 日记 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Coding Diary(2025-6-26)</title>
       <link href="/blogs/2025/06/26/Coding%20Diary(2025-6-26)/"/>
       <url>/blogs/2025/06/26/Coding%20Diary(2025-6-26)/</url>

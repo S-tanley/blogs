@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>多模态中的 Single String 与 Two String</title>
+      <link href="/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/"/>
+      <url>/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/</url>
+      
+        <content type="html"><![CDATA[<h3 id="多模态AI如何理解世界？一文读懂单序列与双序列模型">多模态AI如何理解世界？一文读懂单序列与双序列模型</h3><p>多模态人工智能的浪潮正在席卷而来，从能够理解图片和文字的 LLaVA，到能生成视频的 Sora，AI 正在以前所未有的方式将不同类型的信息联系起来。</p><p>那么，这些多模态模型究竟是如何将图像、文本等不同模态的信息融合在一起的呢？</p><p>目前，主流的架构可以归纳为两大阵营：**单序列（Single String）**和双序列（Two String）。理解这两种范式，就能抓住多模态模型的核心。</p><hr><h4 id="1-单序列（Single-String）方法：一次看懂，全局理解">1. 单序列（Single String）方法：一次看懂，全局理解</h4><p><strong>核心思想</strong>：将所有模态的数据都转化为同一种“语言”（Token），然后将它们像串珠子一样拼接成一个长长的序列，交给一个统一的 Transformer 模型进行处理。</p><p>这就像是**“一图胜千言”**。模型将图像视为一长串“视觉词汇”，将它们与文本中的普通词汇放在一起，在同一个注意力空间中进行交互和理解。</p><ul><li><strong>工作流程</strong>：<ol><li><strong>图像编码</strong>：将一张图片分割成许多小块（Patches）。</li><li><strong>特征投影</strong>：使用一个视觉编码器将这些 Patches 转化为一系列图像 Token，并投影到与文本 Token 相同的嵌入空间。</li><li><strong>序列拼接</strong>：将图像 Token 序列与文本 Token 序列拼接起来，通常还会用特殊分隔符（如 <code>[IMG_START]</code>）进行标记。</li><li><strong>统一处理</strong>：将拼接后的长序列一次性输入给一个统一的 Transformer 模型。</li></ol></li><li><strong>优点</strong>：<ul><li><strong>架构简单</strong>：只需一个 Transformer 模型，无需额外的复杂融合层。</li><li><strong>隐式对齐</strong>：模型通过全局自注意力机制，自然地学习图像和文本之间的对齐关系。</li></ul></li><li><strong>缺点</strong>：<ul><li><strong>计算成本高</strong>：自注意力机制的计算复杂度与序列长度的平方成正比。图像 Token 数量多，拼接后序列变得很长，导致计算量巨大。</li></ul></li><li><strong>代表模型</strong>：LLaVA, Flamingo, IDEFICS。</li></ul><hr><h4 id="2-双序列（Two-String）方法：分而治之，最后融合">2. 双序列（Two String）方法：分而治之，最后融合</h4><p><strong>核心思想</strong>：对不同模态的数据使用独立的、专门的编码器进行处理。在处理的后期，再通过一个专门的“融合”模块将不同模态的特征结合起来。</p><p>这就像是**“分开阅读，再独立思考”**。模型先独立地“看”图片，再独立地“读”文本，最后再“思考”如何将两者联系起来。</p><ul><li><strong>工作流程</strong>：<ol><li><strong>文本编码</strong>：使用一个文本编码器（如 BERT）将文本序列编码为文本特征。</li><li><strong>图像编码</strong>：使用一个图像编码器（如 ViT）将图像编码为图像特征。</li><li><strong>专门融合</strong>：将两个编码器输出的特征向量（或序列）送入一个融合层，通过**交叉注意力（Cross-Attention）**或简单的拼接，来学习和融合跨模态的信息。</li></ol></li><li><strong>优点</strong>：<ul><li><strong>计算高效</strong>：每个编码器处理较短的序列，计算成本更低。</li><li><strong>模态特化</strong>：可以为每个模态使用最适合的预训练模型和架构，灵活性高。</li></ul></li><li><strong>缺点</strong>：<ul><li><strong>架构复杂</strong>：需要设计和训练一个有效的融合机制，这比单流模型更具挑战性。</li><li><strong>对齐显式化</strong>：模型必须显式地学习如何对齐两个独立的特征，如果融合层设计不当，会限制性能。</li></ul></li><li><strong>代表模型</strong>：CLIP (经典的双编码器模型), VisualBERT。</li></ul><hr><h4 id="3-对比总结：如何选择？">3. 对比总结：如何选择？</h4><table><thead><tr><th>特性</th><th><strong>单序列（Single String）</strong></th><th><strong>双序列（Two String）</strong></th></tr></thead><tbody><tr><td><strong>核心思想</strong></td><td>统一所有模态为一长串 Token</td><td>分别编码，后期专门融合</td></tr><tr><td><strong>架构</strong></td><td>单个统一的 Transformer 模型</td><td>独立编码器 + 融合模块</td></tr><tr><td><strong>计算成本</strong></td><td>较高（与总序列长度的平方成正比）</td><td>较低（编码器内部并行，融合层成本可控）</td></tr><tr><td><strong>主要优势</strong></td><td>架构简单，对齐自然</td><td>灵活性高，计算更高效</td></tr><tr><td><strong>典型模型</strong></td><td>LLaVA, Flamingo, IDEFICS</td><td>CLIP, VisualBERT</td></tr></tbody></table><p><strong>如何选择？</strong></p><ul><li>如果你追求<strong>极致的性能</strong>，并且希望模型在多模态数据之间建立最细致的、隐式的联系，<strong>单序列模型</strong>可能是更好的选择。</li><li>如果你更看重<strong>计算效率、灵活性</strong>，希望在已有预训练模型上快速构建，或者需要将模型部署到资源受限的设备上，<strong>双序列模型</strong>可能更具优势。</li></ul><p>这两种范式都在不断演进，为我们打开了通往真正多模态AI世界的大门。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Research Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Multimodal </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>StreamMUSE</title>
+      <link href="/blogs/2025/07/14/StreamMUSE/"/>
+      <url>/blogs/2025/07/14/StreamMUSE/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Fake-Offline">Fake Offline</h2><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">fake_offline</span>():<br>model = load_from_checkpoint(model_path)<br>  <br>  <span class="hljs-comment"># Convert midi file to tensor</span><br>  <span class="hljs-comment"># midi file -&gt; [1, num_logical_ticks, max_polyphony*2]</span><br>  x_mel, x_acc = conter_midi_to_tensor(midi_path)<br>  <br>  <span class="hljs-comment"># fake inference round</span><br>  <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n_round):<br>    <span class="hljs-comment"># get right prompts</span><br>    prompt_length_i = prompt_length + i*gen_interval_ticks<br>  x_mel_pre = get_proper_mel_prompt_length(prompt_length_i)<br>    x_acc_pre = get_proper_acc_prompt_length(prompt_length_i)<br>    x = merge_mel_acc(x_mel_pre, x_acc_pre)<br>    <br>    <span class="hljs-comment"># generate output</span><br>    output = model.forward(x, gen_seq_len)<br>    <br>    <span class="hljs-comment"># seperate the output back to x_mel_pre and x_acc_pre</span><br>    x_mel_pre, x_acc_pre = seperate_output(output)<br>    <br>    <span class="hljs-comment"># if it&#x27;s first round, replace some acc with empty frame</span><br>    <span class="hljs-keyword">if</span> (i = <span class="hljs-number">0</span>):<br>      set_corresponding_frame_empty(x_acc_pre)<br>    <span class="hljs-keyword">else</span>:<br>      tem_start = prompt_length + i*gen_interval_ticks + latency<br>      tem_end = prompt_length + i*gen_interval_ticks + latency + gen_interval_ticks<br>    <br>    <span class="hljs-comment"># 拼接 tem_</span><br>    <br>  decode_output(output)<br></code></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Research Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> NLP </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>标准卷积过程</title>
       <link href="/blogs/2025/07/12/%E6%A0%87%E5%87%86%E5%8D%B7%E7%A7%AF%E8%BF%87%E7%A8%8B/"/>
       <url>/blogs/2025/07/12/%E6%A0%87%E5%87%86%E5%8D%B7%E7%A7%AF%E8%BF%87%E7%A8%8B/</url>
@@ -933,6 +983,31 @@
     
     
     <entry>
+      <title>一个 CS 大三学生的碎碎念</title>
+      <link href="/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89%20CS%20%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/"/>
+      <url>/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89%20CS%20%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/</url>
+      
+        <content type="html"><![CDATA[<p>在这里随便写点东西，做一个小小的总结吧。</p><p>感觉这三年学了很多东西，但还是很迷茫，不知道以后应该干什么。马上就大四了，感觉工作也找不到，博士也很难伸到，暑研也伸不到，唯一感觉做的比较好的就是绩点维持的挺好，而且大部分课都是有比较认真的学，确实是会了一些东西，但感觉都很理论，也不知道怎么用。找工作的时候需要的技术栈基本都不会，或者只会一点皮毛，真的遇到大型项目就啥也不会，也无从下手；找 research 也是，要读很多导师方向的论文，感觉之前学的一些东西也基本用不上，就感觉很多东西都匹配不上。但其实也没什么可抱怨的，毕竟感觉自己确实是有点三天打鱼两天晒网，很多东西想要自学但是从没有坚持做完过，虽然已经快大四了，感觉再开始自学一些东西已经有点晚了，但还是希望自己在最后一年真的完整的自学完几门网课，毕竟现在感觉已经明确了自己未来的方向了，就不能在松懈了。</p><p>最近也看到了很多大佬的总结，感觉大部分都是大一大二就已经很强，至少也是有明确道路了，空闲时间大部分都在提升自己的技术。我大一的时候在想，刚上大学，不用对自己太苛刻。应该只有在上大学之前的暑假系统的学了一下C语言，又因为要 transfer，要学托福，这个占用了很多的时间，包括大一到大二的暑假，还有大二的寒假。最后 transfer 来到 UW-Madison，还是很喜欢这个学校的，发现学业压力甚至更重了，因为要上很多之前上过的课，我又傻傻的 double 了一个 STAT 的 major。其实根本不应该 double，当时觉得学一学 STAT 的课很不错，但其实 CS 有那么多的方向可以去学，真的没必要再去涉猎 STAT。于是乎，现在就导致我没有一门精的。</p><p>25 Spring 这个学期可以说是我压力最大的一个学期，因为我找了一个 remote intern，还有一个 remote research。但是发现如果去找工，自己的技术根本不够用，但是又因为这个 intern 占据了我一定的时间，再加上学业上真的压力很重，我这个学期连续5周，每周至少一个 midterm，放了一个一周的 Spring break，回来之后又是连着两周有考试，在之后两周就就是 final。Remote research 导师人也很放羊，但不得不说导师我感觉人很好了，毕竟我确实啥也不会，也愿意跟我meeting 一下，给我一些 paper list，虽然也不花太多时间吧，但我感觉还是挺好的。这样毕竟压力很小，导致我基本没有进展，因为更多的时间都花在了另外两项上。如果硬要说的话，一天我差不多有 10 - 12 个小时是可以用来做事情的，如果这 10 - 12 个小时，我一分钟都不玩，我觉得确实可以同时 handle 这三项，但是太难了，我唯一的娱乐就是踢球，或者看小说，真的确实是做不到一点娱乐都没有。这就导致确实没办法平衡好，😮‍💨，还是太菜了。而且我这个 remote intern，给我的心里压力比较大，虽然我当时就是随机投了一个，然后也是 unpaid，但是当时确实是有承诺会好好做，感觉也没有做的很好，有的时候就感觉压力很大，因为会有自己没有说到做到的内疚。</p><p>但毕竟也不是完全没有收获，我感觉至少我未来的学习方向清晰了一点，要系统的学一学前端；其次就是学一学 HPC，disturbed sys，并行计算方向的课程；最后就是从假期开始每日一题，在做题的同时学一学算法。</p><p>这个暑假一定要好好利用好💪，不能在空耗时间了，给自己狠狠的立 flag。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Life Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 随笔 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>建立个人 Blog 网站</title>
       <link href="/blogs/2025/03/25/%E5%BB%BA%E7%AB%8B%E4%B8%AA%E4%BA%BABlog%E7%BD%91%E7%AB%99/"/>
       <url>/blogs/2025/03/25/%E5%BB%BA%E7%AB%8B%E4%B8%AA%E4%BA%BABlog%E7%BD%91%E7%AB%99/</url>
@@ -952,31 +1027,6 @@
             <tag> Web </tag>
             
             <tag> Personal Blog Website </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>一个 CS 大三学生的碎碎念</title>
-      <link href="/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89%20CS%20%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/"/>
-      <url>/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89%20CS%20%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/</url>
-      
-        <content type="html"><![CDATA[<p>在这里随便写点东西，做一个小小的总结吧。</p><p>感觉这三年学了很多东西，但还是很迷茫，不知道以后应该干什么。马上就大四了，感觉工作也找不到，博士也很难伸到，暑研也伸不到，唯一感觉做的比较好的就是绩点维持的挺好，而且大部分课都是有比较认真的学，确实是会了一些东西，但感觉都很理论，也不知道怎么用。找工作的时候需要的技术栈基本都不会，或者只会一点皮毛，真的遇到大型项目就啥也不会，也无从下手；找 research 也是，要读很多导师方向的论文，感觉之前学的一些东西也基本用不上，就感觉很多东西都匹配不上。但其实也没什么可抱怨的，毕竟感觉自己确实是有点三天打鱼两天晒网，很多东西想要自学但是从没有坚持做完过，虽然已经快大四了，感觉再开始自学一些东西已经有点晚了，但还是希望自己在最后一年真的完整的自学完几门网课，毕竟现在感觉已经明确了自己未来的方向了，就不能在松懈了。</p><p>最近也看到了很多大佬的总结，感觉大部分都是大一大二就已经很强，至少也是有明确道路了，空闲时间大部分都在提升自己的技术。我大一的时候在想，刚上大学，不用对自己太苛刻。应该只有在上大学之前的暑假系统的学了一下C语言，又因为要 transfer，要学托福，这个占用了很多的时间，包括大一到大二的暑假，还有大二的寒假。最后 transfer 来到 UW-Madison，还是很喜欢这个学校的，发现学业压力甚至更重了，因为要上很多之前上过的课，我又傻傻的 double 了一个 STAT 的 major。其实根本不应该 double，当时觉得学一学 STAT 的课很不错，但其实 CS 有那么多的方向可以去学，真的没必要再去涉猎 STAT。于是乎，现在就导致我没有一门精的。</p><p>25 Spring 这个学期可以说是我压力最大的一个学期，因为我找了一个 remote intern，还有一个 remote research。但是发现如果去找工，自己的技术根本不够用，但是又因为这个 intern 占据了我一定的时间，再加上学业上真的压力很重，我这个学期连续5周，每周至少一个 midterm，放了一个一周的 Spring break，回来之后又是连着两周有考试，在之后两周就就是 final。Remote research 导师人也很放羊，但不得不说导师我感觉人很好了，毕竟我确实啥也不会，也愿意跟我meeting 一下，给我一些 paper list，虽然也不花太多时间吧，但我感觉还是挺好的。这样毕竟压力很小，导致我基本没有进展，因为更多的时间都花在了另外两项上。如果硬要说的话，一天我差不多有 10 - 12 个小时是可以用来做事情的，如果这 10 - 12 个小时，我一分钟都不玩，我觉得确实可以同时 handle 这三项，但是太难了，我唯一的娱乐就是踢球，或者看小说，真的确实是做不到一点娱乐都没有。这就导致确实没办法平衡好，😮‍💨，还是太菜了。而且我这个 remote intern，给我的心里压力比较大，虽然我当时就是随机投了一个，然后也是 unpaid，但是当时确实是有承诺会好好做，感觉也没有做的很好，有的时候就感觉压力很大，因为会有自己没有说到做到的内疚。</p><p>但毕竟也不是完全没有收获，我感觉至少我未来的学习方向清晰了一点，要系统的学一学前端；其次就是学一学 HPC，disturbed sys，并行计算方向的课程；最后就是从假期开始每日一题，在做题的同时学一学算法。</p><p>这个暑假一定要好好利用好💪，不能在空耗时间了，给自己狠狠的立 flag。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Life Blogs </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 随笔 </tag>
             
         </tags>
       

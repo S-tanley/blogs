@@ -1,0 +1,404 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Git 命令总结 | Stanley's Blog</title><meta name="author" content="Stanley Zheng"><meta name="copyright" content="Stanley Zheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Detail 同步 fork 与原始仓库（Upstream） 第一次配置 upstream git remote add upstream https:&#x2F;&#x2F;github.com&#x2F;original-user&#x2F;original-repo.git  给 fork 的仓库添加原始仓库作为 upstream  每次同步更新流程 git fetch upstream              # 拉取原始仓库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 命令总结">
+<meta property="og:url" content="https://s-tanley.github.io/blogs/2025/04/10/Git%20%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Stanley&#39;s Blog">
+<meta property="og:description" content="Detail 同步 fork 与原始仓库（Upstream） 第一次配置 upstream git remote add upstream https:&#x2F;&#x2F;github.com&#x2F;original-user&#x2F;original-repo.git  给 fork 的仓库添加原始仓库作为 upstream  每次同步更新流程 git fetch upstream              # 拉取原始仓库">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG">
+<meta property="article:published_time" content="2025-04-10T05:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-14T14:59:25.587Z">
+<meta property="article:author" content="Stanley Zheng">
+<meta property="article:tag" content="Tools">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Git 命令总结",
+  "url": "https://s-tanley.github.io/blogs/2025/04/10/Git%20%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/",
+  "image": "https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG",
+  "datePublished": "2025-04-10T05:00:00.000Z",
+  "dateModified": "2025-04-14T14:59:25.587Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Stanley Zheng",
+      "url": "https://s-tanley.github.io/blogs/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/blogs/img/favicon.png"><link rel="canonical" href="https://s-tanley.github.io/blogs/2025/04/10/Git%20%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/blogs/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/blogs/',
+  algolia: undefined,
+  localSearch: {"path":"/blogs/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Git 命令总结',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">43</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/blogs/"><img class="site-icon" src="/blogs/img/MyProfilePicture.JPG" alt="Logo"><span class="site-name">Stanley's Blog</span></a><a class="nav-page-title" href="/blogs/"><span class="site-name">Git 命令总结</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Git 命令总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-04-10T05:00:00.000Z" title="Created 2025-04-10 00:00:00">2025-04-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-04-14T14:59:25.587Z" title="Updated 2025-04-14 09:59:25">2025-04-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/blogs/categories/Tech-Blogs/">Tech Blogs</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>Detail</h1>
+<h2 id="同步-fork-与原始仓库（Upstream）">同步 fork 与原始仓库（Upstream）</h2>
+<h3 id="第一次配置-upstream">第一次配置 upstream</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git remote add upstream https://github.com/original-user/original-repo.git<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>给 fork 的仓库添加原始仓库作为 <code>upstream</code></p>
+</blockquote>
+<h3 id="每次同步更新流程">每次同步更新流程</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git fetch upstream              <span class="hljs-comment"># 拉取原始仓库更新</span><br>git checkout main               <span class="hljs-comment"># 切换到 main 分支</span><br>git merge upstream/main         <span class="hljs-comment"># 合并 upstream 的 main 到本地 main</span><br>git push origin main            <span class="hljs-comment"># 推送更新后的 main 到 GitHub fork</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>用于保持 fork 与原始仓库同步</p>
+</blockquote>
+<h3 id="查看所有远程仓库">查看所有远程仓库</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git remote -v<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>显示当前配置的远程仓库地址，包括 <code>origin</code> 和 <code>upstream</code></p>
+</blockquote>
+<hr>
+<h2 id="合并-main-到某个分支">合并 main 到某个分支</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout feature-x          <span class="hljs-comment"># 切换到目标分支</span><br>git merge main                  <span class="hljs-comment"># 把 main 的更新合并进来</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>建议先更新 main（<code>git checkout main &amp;&amp; git pull</code>）后再执行，以确保最新</p>
+</blockquote>
+<hr>
+<h2 id="从某个分支合并回-main">从某个分支合并回 main</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout main               <span class="hljs-comment"># 切到 main 分支</span><br>git merge feature-x             <span class="hljs-comment"># 合并 feature-x 分支</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>若 feature-x 和其他分支有改动重叠，建议先 <code>git merge main</code> 到 feature-x 中，提前解决冲突</p>
+</blockquote>
+<hr>
+<h2 id="删除分支（本地-远程）">删除分支（本地 &amp; 远程）</h2>
+<h3 id="删除本地分支">删除本地分支</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch -d branch-name       <span class="hljs-comment"># 安全删除（分支已 merge）</span><br>git branch -D branch-name       <span class="hljs-comment"># 强制删除（未 merge）</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：不能删除当前所在的分支，要先切换到其他分支</p>
+</blockquote>
+<h3 id="删除远程分支">删除远程分支</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git push origin --delete branch-name<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>正确格式是分支名，不是 <code>origin/branch-name</code></p>
+</blockquote>
+<hr>
+<h1>总结命令速查表</h1>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>添加 upstream</td>
+<td><code>git remote add upstream URL</code></td>
+</tr>
+<tr>
+<td>获取原始仓库更新</td>
+<td><code>git fetch upstream</code></td>
+</tr>
+<tr>
+<td>合并 upstream/main 到本地 main</td>
+<td><code>git merge upstream/main</code></td>
+</tr>
+<tr>
+<td>推送更新后的 main</td>
+<td><code>git push origin main</code></td>
+</tr>
+<tr>
+<td>合并 main 到某分支</td>
+<td><code>git checkout branch &amp;&amp; git merge main</code></td>
+</tr>
+<tr>
+<td>合并某分支到 main</td>
+<td><code>git checkout main &amp;&amp; git merge branch</code></td>
+</tr>
+<tr>
+<td>删除本地分支（安全/强制）</td>
+<td><code>git branch -d name</code> / <code>git branch -D name</code></td>
+</tr>
+<tr>
+<td>删除远程分支</td>
+<td><code>git push origin --delete name</code></td>
+</tr>
+<tr>
+<td>查看所有远程分支</td>
+<td><code>git branch -r</code></td>
+</tr>
+<tr>
+<td>查看远程仓库</td>
+<td><code>git remote -v</code></td>
+</tr>
+<tr>
+<td>查看当前用的是哪个 pip/python</td>
+<td><code>which pip</code> / <code>which python</code></td>
+</tr>
+</tbody>
+</table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs">Stanley Zheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs/2025/04/10/Git%20%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/">https://s-tanley.github.io/blogs/2025/04/10/Git 命令总结/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blogs/tags/Tools/">Tools</a></div><div class="post-share"><div class="social-share" data-image="/blogs/img/MyProfilePicture.JPG" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/blogs/2025/04/09/Transformer/" title="Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Transformer</div></div><div class="info-2"><div class="info-item-1">本篇blog讲了transformer里的几个比较重要的概念，attention，multi-head attention， self-attention &amp; cross-attention 以及 encoder &amp; decoder。  单头Attention最经典公式：  Attention(Q,K,V)=softmax(QKTdk)V\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V Attention(Q,K,V)=softmax(dk​​QKT​)V  多头Attention（Transformer中常用）：  MultiHead(Q,K,V)=Concat(softmax(QWiQ(KWiK)Tdk)VWiV)i=1hWO\text{MultiHead}(Q,K,V) =...</div></div></div></a><a class="pagination-related" href="/blogs/2025/04/14/Coding%20Diary(2025-4-14)/" title="Coding Diary(2025-4-14)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Coding Diary(2025-4-14)</div></div><div class="info-2"><div class="info-item-1">今天打算开始熟悉 SGLang，配置环境的过程果然出现问题了，就先记录一下。 Install from the source 的最后一步： (sglang-dev) zhengbowen@MacBookPro sglang % pip install -e &quot;python[all]&quot; --find-links https://flashinfer.ai/whl/cu124/torch2.5/flashinfer-python 出现了问题。 报错如下： INFO: pip is looking at multiple versions of sglang[srt] to determine which version is compatible with other requirements. This could take a while.ERROR: Could not find a version that satisfies the requirement sgl-kernel==0.0.8.post3; extra ==...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/blogs/2025/04/17/Docker%20%E6%A6%82%E8%A7%88%20&%20Docker%20%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/" title="Docker 概览 &amp; Docker 命令总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-17</div><div class="info-item-2">Docker 概览 &amp; Docker 命令总结</div></div><div class="info-2"><div class="info-item-1">Docker 概览 &amp; Docker 命令总结  一、Docker 基础概念与原理 什么是 Docker？ Docker 是一个开源的容器平台，用于打包、分发和运行应用程序及其所有依赖项。  把应用、运行环境、依赖打包成一个“镜像” 运行镜像就生成一个“容器”，容器彼此隔离，不影响宿主机  核心概念：    名称 说明     镜像 Image 应用 + 环境的静态模板   容器 Container 镜像的运行实例   Dockerfile 描述如何构建镜像的脚本   Registry 镜像仓库，例如 Docker Hub    Docker 工作原理（Linux 容器机制）  利用 Linux 的 namespace（隔离）和 cgroups（资源限制）实现 容器共享宿主机内核，但拥有独立文件系统、网络、进程空间 启动速度极快，资源占用小   二、Docker 镜像构建机制与实践 镜像是分层构建的  每个 Dockerfile 指令都会生成一个只读的文件系统层 构建时 Docker 利用缓存提升效率  Dockerfile...</div></div></div></a><a class="pagination-related" href="/blogs/2025/06/15/Nsight%20System%20&%20Nsight%20Compute/" title="Nsight System &amp; Nsight Compute"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-15</div><div class="info-item-2">Nsight System &amp; Nsight Compute</div></div><div class="info-2"><div class="info-item-1">有关 Nsight System 和 Nsight Compute 的介绍与常用命令总结。 Introduction 核心定位：一个看“森林”，一个看“树木” 这是理解这两个工具最核心的一点。  Nsight Systems (nsys): 系统级性能分析器，负责看“森林”。它监控您的整个应用程序，告诉您CPU和GPU之间是如何交互的，时间都花在了哪些大的模块上（例如：哪个CUDA Kernel耗时最长、数据拷贝花了多久）。 Nsight Compute (ncu): Kernel级性能分析器，负责看“树木”。当nsys帮您找到最值得优化的那棵“树”（即耗时最长的Kernel）后，ncu会深入到这棵树的内部，详细分析它的每一个细节（例如：它的计算单元利用率如何？内存访问效率高不高？具体是哪一行代码拖慢了速度？）。  一个生动的比喻：  nsys 就像城市交通地图，它告诉您哪条主干道（Kernel）发生了拥堵。 ncu 就像汽车引擎诊断仪，它负责分析堵在路上的那辆车，告诉您它的引擎、油路、电路具体哪里出了问题。   对比总结表    方面 (Aspect) NVIDIA...</div></div></div></a><a class="pagination-related" href="/blogs/2025/06/26/rsync%20%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/" title="rsync 命令总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-26</div><div class="info-item-2">rsync 命令总结</div></div><div class="info-2"><div class="info-item-1">rsync (remote sync) 是一个用于在本地或远程系统之间高效地同步文件和目录的工具。它的核心优势是使用“增量算法”，只传输源和目标之间有差异的部分，从而大大减少数据传输量。  1. 基本语法 rsync [选项] &lt;源路径&gt; &lt;目标路径&gt;  源路径 (Source): 您要从中复制文件的地方。 目标路径 (Destination): 您要将文件复制到的地方。 源和目标都可以是本地路径，或者是 user@host:path 格式的远程路径。  一个非常重要的细节：源目录末尾的斜杠 /  rsync ... source/ destination: 表示将 source 目录里面的内容复制到 destination 目录中。 rsync ... source destination: 表示将 source 目录本身（连同文件夹一起）复制到 destination 目录中，最终路径会是 destination/source/。 通常，您想要的是第一种行为。   2. 常用选项 (Options) 这些选项可以组合使用，例如 -avh。   -a,...</div></div></div></a><a class="pagination-related" href="/blogs/2025/05/16/caffeinate%20%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/" title="Mac 好用的命令行工具总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-16</div><div class="info-item-2">Mac 好用的命令行工具总结</div></div><div class="info-2"><div class="info-item-1">把一些可能用到的比较好用的工具总结到了这里。 使用 rsync 进行高效文件同步与恢复（macOS） rsync 是 macOS 和 Linux 系统中常用的命令行文件同步工具，支持断点续传、增量复制、排除文件等功能，非常适合拷贝大文件或进行数据迁移。  一、基本语法 rsync [选项] 源路径 目标路径 源路径和目标路径都可以是本地路径或远程路径（使用 SSH）。拷贝路径时注意 / 的使用影响结构，详见后文。 二、常用选项说明    选项 含义     -a 归档模式（保留权限、时间戳、符号链接等）   -v 输出详细信息（verbose）   -h 以人类可读的方式显示大小（如 1K、20M）   –progress 显示每个文件的复制进度   –dry-run 预演命令但不执行操作，适合拷贝前查看将会做什么   –delete 删除目标路径中，源路径中已不存在的文件（谨慎使用）   –update 只复制源路径中比目标路径更新的文件   –exclude 排除某些文件或目录，例如 .DS_Store    三、路径末尾 / 的含义  不加...</div></div></div></a><a class="pagination-related" href="/blogs/2025/05/22/Linux%20%E7%B3%BB%E7%BB%9F%E7%A1%AC%E4%BB%B6%E4%BF%A1%E6%81%AF%E6%A3%80%E6%9F%A5%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/" title="Linux 系统硬件信息检查命令总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-22</div><div class="info-item-2">Linux 系统硬件信息检查命令总结</div></div><div class="info-2"><div class="info-item-1">本文档总结了在 Linux 系统中查看各种硬件组件信息的常用命令。这些命令通常需要在终端中执行。  CPU 信息 🧠  lscpu: 显示 CPU 架构、核心数、线程数、速度、缓存等详细信息。  lscpu  cat /proc/cpuinfo: 查看更详细的 CPU 底层信息，每个逻辑核心都会有条目。  cat /proc/cpuinfo  通过 dmidecode 查看处理器详情 (通常需要 sudo):  sudo dmidecode -t processor    内存 (RAM) 信息 💾  free -h: 以人类可读格式显示总内存、已用、可用内存及交换空间情况。  free -h  cat /proc/meminfo: 查看详细的内存使用和内核统计信息。  cat /proc/meminfo  sudo dmidecode -t memory 或 sudo dmidecode -t 17: 查看每个物理内存条的详细信息，如制造商、型号、序列号、容量、速度、类型 (DDR4)、Rank、是否支持 ECC 等。  sudo dmidecode -t...</div></div></div></a><a class="pagination-related" href="/blogs/2025/06/12/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/" title="常用命令总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-12</div><div class="info-item-2">常用命令总结</div></div><div class="info-2"><div class="info-item-1">我的常用命令总结 Linux 查找带某个关键字的进程 方法一 ps aux | grep -i code 命令解释:  ps aux: 列出系统上所有用户 (a) 正在运行的进程的详细信息 (u)，包括那些没有终端的进程 (x)。 |: 这是管道符，将前一个命令的输出作为后一个命令的输入。 grep -i code: 从输入中查找所有包含 “code” 的行，-i 表示不区分大小写（这样能同时匹配到 code 和 Code）。  方法二 pgrep -afl code 命令解释:  pgrep: “process grep”，专门用于查找进程。 -a: 显示完整的命令行。 -f: 在整个命令行中搜索模式（而不仅仅是进程名）。 -l: 显示进程名和PID。  kill 进程 pkill 命令可以直接根据进程的名称或其他属性来杀死进程，比手动查找 PID 更方便。   直接根据名称或关键词杀死进程： pkill -f &quot;程序相关的关键词&quot;   -f: 这个选项非常有用，它会匹配完整的命令行，而不仅仅是进程名。   示例： 杀死所有包含...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Giscus</span><span id="switch-btn"></span><span class="second-comment">Utterances</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="utterances-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Stanley Zheng</div><div class="author-info-description">Hi, I am Stanley. I am currently a CS student in the University of Wisconsin-Madison. </div><div class="site-data"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">43</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/S-tanley"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://s-tanley.github.io" target="_blank" title="Homepage"><i class="fas fa-id-badge" style="color: #808080;"></i></a><a class="social-icon" href="https://github.com/S-tanley" target="_blank" title="Github"><i class="fab fa-github" style="color: #808080;"></i></a><a class="social-icon" href="mailto:zbowen936@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #808080;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Detail</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5-fork-%E4%B8%8E%E5%8E%9F%E5%A7%8B%E4%BB%93%E5%BA%93%EF%BC%88Upstream%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">同步 fork 与原始仓库（Upstream）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%85%8D%E7%BD%AE-upstream"><span class="toc-number">1.1.1.</span> <span class="toc-text">第一次配置 upstream</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E6%AC%A1%E5%90%8C%E6%AD%A5%E6%9B%B4%E6%96%B0%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">每次同步更新流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="toc-number">1.1.3.</span> <span class="toc-text">查看所有远程仓库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%88%E5%B9%B6-main-%E5%88%B0%E6%9F%90%E4%B8%AA%E5%88%86%E6%94%AF"><span class="toc-number">1.2.</span> <span class="toc-text">合并 main 到某个分支</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E6%9F%90%E4%B8%AA%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6%E5%9B%9E-main"><span class="toc-number">1.3.</span> <span class="toc-text">从某个分支合并回 main</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%88%86%E6%94%AF%EF%BC%88%E6%9C%AC%E5%9C%B0-%E8%BF%9C%E7%A8%8B%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">删除分支（本地 &amp; 远程）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%9C%AC%E5%9C%B0%E5%88%86%E6%94%AF"><span class="toc-number">1.4.1.</span> <span class="toc-text">删除本地分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF"><span class="toc-number">1.4.2.</span> <span class="toc-text">删除远程分支</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">总结命令速查表</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/11/Notes---%E8%8B%8F%E5%89%91%E6%9E%97%E5%8D%9A%E5%AE%A2%EF%BC%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%EF%BC%89/" title="Notes---苏剑林博客（神经网络与深度学习基础）">Notes---苏剑林博客（神经网络与深度学习基础）</a><time datetime="2025-08-11T05:00:00.000Z" title="Created 2025-08-11 00:00:00">2025-08-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/" title="多模态中的 Single String 与 Two String">多模态中的 Single String 与 Two String</a><time datetime="2025-08-05T05:00:00.000Z" title="Created 2025-08-05 00:00:00">2025-08-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/14/StreamMUSE/" title="StreamMUSE">StreamMUSE</a><time datetime="2025-07-14T05:00:00.000Z" title="Created 2025-07-14 00:00:00">2025-07-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/12/%E6%A0%87%E5%87%86%E5%8D%B7%E7%A7%AF%E8%BF%87%E7%A8%8B/" title="标准卷积过程">标准卷积过程</a><time datetime="2025-07-12T05:00:00.000Z" title="Created 2025-07-12 00:00:00">2025-07-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/08/Coding%20Diary(2025-7-8)/" title="Coding Diary(2025-7-8)">Coding Diary(2025-7-8)</a><time datetime="2025-07-08T05:00:00.000Z" title="Created 2025-07-08 00:00:00">2025-07-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Stanley Zheng</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/blogs/js/utils.js"></script><script src="/blogs/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"data-mapping":"pathname","data-input-position":"top","data-reactions-enabled":1,"data-strict":1}
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'S-tanley/blogs',
+      'data-repo-id': 'R_kgDOOPJb6Q',
+      'data-category-id': 'DIC_kwDOOPJb6c4CohlA',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+  const getUtterancesTheme = theme => theme === 'dark' ? 'photon-dark' : 'github-light'
+
+  const loadUtterances = (el = document, key) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyUtterances = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const config = {
+      src: 'https://utteranc.es/client.js',
+      repo: 'S-tanley/blogs',
+      theme: getUtterancesTheme(document.documentElement.getAttribute('data-theme')),
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      'issue-term': isShuoshuo ? key : (option && option['issue-term']) || 'pathname'
+    }
+
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => ele.setAttribute(key, value))
+    el.querySelector('#utterances-wrap').appendChild(ele)
+  }
+
+  const changeUtterancesTheme = theme => {
+    const iframe = document.querySelector('#utterances-wrap iframe')
+    if (iframe) {
+      const message = {
+        type: 'set-theme',
+        theme: getUtterancesTheme(theme)
+      };
+      iframe.contentWindow.postMessage(message, 'https://utteranc.es')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeUtterancesTheme, 'utterances')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Utterances'
+      ? window.shuoshuoComment = { loadComment: loadUtterances }
+      : window.loadOtherComment = loadUtterances
+    return
+  }
+  
+  if ('Giscus' === 'Utterances' || !false) {
+    if (false) btf.loadComment(document.getElementById('utterances-wrap'), loadUtterances)
+    else loadUtterances()
+  } else {
+    window.loadOtherComment = loadUtterances
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/blogs/js/search/local-search.js"></script></div></div></body></html>

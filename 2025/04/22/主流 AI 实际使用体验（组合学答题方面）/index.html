@@ -1,0 +1,420 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>主流 AI 实际使用体验（组合学答题方面） | Stanley's Blog</title><meta name="author" content="Stanley Zheng"><meta name="copyright" content="Stanley Zheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="进入到了 2025 年，各家的 AI 模型可以说已经是强到不像话了，尤其是 DeepSeek 发布自己的模型之后，各家更是都要卷飞了，尤其是各个大厂，不仅卷性能，卷价格，使用体验上也可以说是卷飞了，正好最近高强度使用了 Google Gemini 2.5 Pro、DeepSeek R1（官网版本）和 ChatGPT o3，浅浅的评测一下。需要注意的是测试时间是 2025.4.22，模型性能可能会根">
+<meta property="og:type" content="article">
+<meta property="og:title" content="主流 AI 实际使用体验（组合学答题方面）">
+<meta property="og:url" content="https://s-tanley.github.io/blogs/2025/04/22/%E4%B8%BB%E6%B5%81%20AI%20%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C%EF%BC%88%E7%BB%84%E5%90%88%E5%AD%A6%E7%AD%94%E9%A2%98%E6%96%B9%E9%9D%A2%EF%BC%89/index.html">
+<meta property="og:site_name" content="Stanley&#39;s Blog">
+<meta property="og:description" content="进入到了 2025 年，各家的 AI 模型可以说已经是强到不像话了，尤其是 DeepSeek 发布自己的模型之后，各家更是都要卷飞了，尤其是各个大厂，不仅卷性能，卷价格，使用体验上也可以说是卷飞了，正好最近高强度使用了 Google Gemini 2.5 Pro、DeepSeek R1（官网版本）和 ChatGPT o3，浅浅的评测一下。需要注意的是测试时间是 2025.4.22，模型性能可能会根">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG">
+<meta property="article:published_time" content="2025-04-22T05:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-23T01:58:25.351Z">
+<meta property="article:author" content="Stanley Zheng">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "主流 AI 实际使用体验（组合学答题方面）",
+  "url": "https://s-tanley.github.io/blogs/2025/04/22/%E4%B8%BB%E6%B5%81%20AI%20%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C%EF%BC%88%E7%BB%84%E5%90%88%E5%AD%A6%E7%AD%94%E9%A2%98%E6%96%B9%E9%9D%A2%EF%BC%89/",
+  "image": "https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG",
+  "datePublished": "2025-04-22T05:00:00.000Z",
+  "dateModified": "2025-04-23T01:58:25.351Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Stanley Zheng",
+      "url": "https://s-tanley.github.io/blogs/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/blogs/img/favicon.png"><link rel="canonical" href="https://s-tanley.github.io/blogs/2025/04/22/%E4%B8%BB%E6%B5%81%20AI%20%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C%EF%BC%88%E7%BB%84%E5%90%88%E5%AD%A6%E7%AD%94%E9%A2%98%E6%96%B9%E9%9D%A2%EF%BC%89/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/blogs/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/blogs/',
+  algolia: undefined,
+  localSearch: {"path":"/blogs/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '主流 AI 实际使用体验（组合学答题方面）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">43</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/blogs/"><img class="site-icon" src="/blogs/img/MyProfilePicture.JPG" alt="Logo"><span class="site-name">Stanley's Blog</span></a><a class="nav-page-title" href="/blogs/"><span class="site-name">主流 AI 实际使用体验（组合学答题方面）</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">主流 AI 实际使用体验（组合学答题方面）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-04-22T05:00:00.000Z" title="Created 2025-04-22 00:00:00">2025-04-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-04-23T01:58:25.351Z" title="Updated 2025-04-22 20:58:25">2025-04-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/blogs/categories/Tech-Blogs/">Tech Blogs</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>进入到了 2025 年，各家的 AI 模型可以说已经是强到不像话了，尤其是 DeepSeek 发布自己的模型之后，各家更是都要卷飞了，尤其是各个大厂，不仅卷性能，卷价格，使用体验上也可以说是卷飞了，正好最近高强度使用了 Google Gemini 2.5 Pro、DeepSeek R1（官网版本）和 ChatGPT o3，浅浅的评测一下。需要注意的是测试时间是 2025.4.22，模型性能可能会根据时间的不同而变化，所以这个评测结果是有时效性的。</p>
+<h1>整体使用体验</h1>
+<p>整体的使用体验，我觉得是 Google Gemini 2.5 Pro &gt; ChatGPT o3 &gt; DeepSeek R1。</p>
+<h2 id="UI">UI</h2>
+<p>UI 上 Gemini 和 ChatGPT 是真的有打磨的很好，但是 DeepSeek 就很粗糙了，但是这也很正常，毕竟 DeepSeek 这个官网模型就相当于是一个“样板间”一样的东西，甚至也没有收费这一说。</p>
+<h2 id="生成速度">生成速度</h2>
+<p>生成速度方面 Google Gemini 2.5 Pro 一骑绝尘，真的太快了，ChatGPT o3 也可以接受，但是 DeepSeek 除了偶尔连不上网络问题让你一会在请求，他的模型也动不动就思考个 400、500 秒，但是同样的题，Google Gemini 2.5 Pro 可能 20 秒就生成完了。具体思考时间如下表：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Google Gemini 2.5 Pro</th>
+<th>ChatGPT o3</th>
+<th>DeepSeek R1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q1</td>
+<td></td>
+<td>5s</td>
+<td>81s</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>51s</td>
+<td>120s</td>
+<td>305s</td>
+</tr>
+<tr>
+<td>Q3</td>
+<td>58s</td>
+<td>63s</td>
+<td>233s</td>
+</tr>
+<tr>
+<td>Q4</td>
+<td>33s</td>
+<td>10s</td>
+<td>149s</td>
+</tr>
+<tr>
+<td>Q5</td>
+<td>50s</td>
+<td>21s</td>
+<td></td>
+</tr>
+<tr>
+<td>Q6</td>
+<td>52s</td>
+<td>12s</td>
+<td></td>
+</tr>
+<tr>
+<td>Q7</td>
+<td>31s</td>
+<td>8s</td>
+<td></td>
+</tr>
+<tr>
+<td>Q8</td>
+<td>18s</td>
+<td>3s</td>
+<td></td>
+</tr>
+<tr>
+<td>Q9</td>
+<td>46s</td>
+<td>16s</td>
+<td></td>
+</tr>
+<tr>
+<td>Q10</td>
+<td>30s</td>
+<td>11s</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>需要注意的是，Google Gemini 2.5 Pro 自己不会计时，所以是我手记的，但是我不仅记 reasoning 时间了，还记了最后生成 final answer 的时间，大概相当于多记了 10 来秒。</p>
+<p>从表里可以发现 ChatGPT 其实也很快，甚至比 Gemini 还快，我有的时候觉得慢可能是因为这个账号当时正好还有别人用。</p>
+<h2 id="图片上传与识别">图片上传与识别</h2>
+<p>这个问题最大的是 DeepSeek，DeepSeek 上传一个图片的速度实在是太慢了，还经常失败。</p>
+<h1>生成文本质量</h1>
+<h2 id="内容格式">内容格式</h2>
+<p>因为是数学题，所以会用到很多数学公式，但其实三个都会有数学公式渲染不正确，最后出来一堆 latex 代码的情况。</p>
+<p>就我这十道题来看，各个模型渲染出错的次数如表</p>
+<table>
+<thead>
+<tr>
+<th>模型名称</th>
+<th>数学公式渲染出错次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google Gemini 2.5 Pro</td>
+<td>0</td>
+</tr>
+<tr>
+<td>ChatGPT o3</td>
+<td>6</td>
+</tr>
+<tr>
+<td>DeepSeek R1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到 ChatGPT o3 的这个数学表达式的渲染可以说是糟糕至极，基本上每一道需要大段数学表达式的地方，他总会有的地方没渲染到，很影响体验。</p>
+<h2 id="内容">内容</h2>
+<p>内容方面我觉得还是 Google Gemini 2.5 Pro &gt; ChatGPT o3 &gt; DeepSeek R1，因为只有 Google Gemini 2.5 Pro 最后呈现出来的内容是一直详略得当的，ChatGPT o3 有的时候就会最后呈现的东西太少，而 DeepSeek R1 属于是基本上每次都少，就导致我光看最后总结出来的内容看不懂，要不然就得看他的 reasoning 内容，要不然就还得再问。</p>
+<p>这个感觉就是工程上的问题了，各个阶段的 prompt 都是怎么写的，Google 明显做的更好。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs">Stanley Zheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs/2025/04/22/%E4%B8%BB%E6%B5%81%20AI%20%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C%EF%BC%88%E7%BB%84%E5%90%88%E5%AD%A6%E7%AD%94%E9%A2%98%E6%96%B9%E9%9D%A2%EF%BC%89/">https://s-tanley.github.io/blogs/2025/04/22/主流 AI 实际使用体验（组合学答题方面）/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blogs/tags/NLP/">NLP</a></div><div class="post-share"><div class="social-share" data-image="/blogs/img/MyProfilePicture.JPG" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/blogs/2025/04/21/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97(2025-4-21)%20/" title="学习日志(2025-4-21)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">学习日志(2025-4-21)</div></div><div class="info-2"><div class="info-item-1">今天基本上一直在写 Math 475 的 midterm 2，然后看了 UCSD 的 CSE 234 的 required reading 1.1，一本挺不错的电子书，哈佛的一本开源书，笑死了，而且还找到了一处笔误，在我的 notes：mlsysbook 里有写，之后用空可以提个 PR。感觉现在我能做的贡献全是这样的校对工作，虽然感觉没什么太大创造力，但感觉还是又一些意义。 Math 475 的 midterm 2 才写到第六题，但如果按照计划我应该给他写完，还有满打满算 5 个小时，加把劲！ 晚上睡觉前也把 Stat 333 的 thesis statement 给交了，虽然基本不用时间。 </div></div></div></a><a class="pagination-related" href="/blogs/2025/04/24/Coding%20Diary(2025-4-24)/" title="Coding Diary(2025-4-24)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Coding Diary(2025-4-24)</div></div><div class="info-2"><div class="info-item-1">最近这两天也算搞了点有意思的，除了不想学习，其他干啥都有意思，笑死了。 走通了怎么在 Mac 上用虚拟机装 NAS，不得不说还是有点成就感的，就是这个公网确实是有点烦躁，搞不出公网访问，看看周末有没有时间再搞一搞。 我用的是飞牛的系统，不得不说作为一个开源的系统确实是看上去很不错，很简单，能直接用。相关的具体流程，包括踩了什么坑之类的打算开一个 NAS 相关的文档去写，这里就不写了。 除了 NAS，今天也算是把我这个 blog 网站的搜索功能加上了，用的本地搜索，搜索速度还是很快的。 这两天尽量把那个 intern 的自动测试给整出来，总是不想做，😮‍💨。 </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/blogs/2025/07/14/StreamMUSE/" title="StreamMUSE"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-14</div><div class="info-item-2">StreamMUSE</div></div><div class="info-2"><div class="info-item-1">Fake Offline def fake_offline():	model = load_from_checkpoint(model_path)    # Convert midi file to tensor  # midi file -&gt; [1, num_logical_ticks, max_polyphony*2]  x_mel, x_acc = conter_midi_to_tensor(midi_path)    # fake inference round  for i in range(n_round):    # get right prompts    prompt_length_i = prompt_length + i*gen_interval_ticks  	x_mel_pre = get_proper_mel_prompt_length(prompt_length_i)    x_acc_pre = get_proper_acc_prompt_length(prompt_length_i)    x =...</div></div></div></a><a class="pagination-related" href="/blogs/2025/04/09/Transformer/" title="Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-09</div><div class="info-item-2">Transformer</div></div><div class="info-2"><div class="info-item-1">本篇blog讲了transformer里的几个比较重要的概念，attention，multi-head attention， self-attention &amp; cross-attention 以及 encoder &amp; decoder。  单头Attention最经典公式：  Attention(Q,K,V)=softmax(QKTdk)V\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V Attention(Q,K,V)=softmax(dk​​QKT​)V  多头Attention（Transformer中常用）：  MultiHead(Q,K,V)=Concat(softmax(QWiQ(KWiK)Tdk)VWiV)i=1hWO\text{MultiHead}(Q,K,V) =...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Giscus</span><span id="switch-btn"></span><span class="second-comment">Utterances</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="utterances-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Stanley Zheng</div><div class="author-info-description">Hi, I am Stanley. I am currently a CS student in the University of Wisconsin-Madison. </div><div class="site-data"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">43</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/S-tanley"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://s-tanley.github.io" target="_blank" title="Homepage"><i class="fas fa-id-badge" style="color: #808080;"></i></a><a class="social-icon" href="https://github.com/S-tanley" target="_blank" title="Github"><i class="fab fa-github" style="color: #808080;"></i></a><a class="social-icon" href="mailto:zbowen936@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #808080;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">整体使用体验</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#UI"><span class="toc-number">1.1.</span> <span class="toc-text">UI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E9%80%9F%E5%BA%A6"><span class="toc-number">1.2.</span> <span class="toc-text">生成速度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E4%B8%8E%E8%AF%86%E5%88%AB"><span class="toc-number">1.3.</span> <span class="toc-text">图片上传与识别</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">生成文本质量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AE%B9%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">内容格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AE%B9"><span class="toc-number">2.2.</span> <span class="toc-text">内容</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/11/Notes---%E8%8B%8F%E5%89%91%E6%9E%97%E5%8D%9A%E5%AE%A2%EF%BC%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%EF%BC%89/" title="Notes---苏剑林博客（神经网络与深度学习基础）">Notes---苏剑林博客（神经网络与深度学习基础）</a><time datetime="2025-08-11T05:00:00.000Z" title="Created 2025-08-11 00:00:00">2025-08-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/" title="多模态中的 Single String 与 Two String">多模态中的 Single String 与 Two String</a><time datetime="2025-08-05T05:00:00.000Z" title="Created 2025-08-05 00:00:00">2025-08-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/14/StreamMUSE/" title="StreamMUSE">StreamMUSE</a><time datetime="2025-07-14T05:00:00.000Z" title="Created 2025-07-14 00:00:00">2025-07-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/12/%E6%A0%87%E5%87%86%E5%8D%B7%E7%A7%AF%E8%BF%87%E7%A8%8B/" title="标准卷积过程">标准卷积过程</a><time datetime="2025-07-12T05:00:00.000Z" title="Created 2025-07-12 00:00:00">2025-07-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/08/Coding%20Diary(2025-7-8)/" title="Coding Diary(2025-7-8)">Coding Diary(2025-7-8)</a><time datetime="2025-07-08T05:00:00.000Z" title="Created 2025-07-08 00:00:00">2025-07-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Stanley Zheng</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/blogs/js/utils.js"></script><script src="/blogs/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"data-mapping":"pathname","data-input-position":"top","data-reactions-enabled":1,"data-strict":1}
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'S-tanley/blogs',
+      'data-repo-id': 'R_kgDOOPJb6Q',
+      'data-category-id': 'DIC_kwDOOPJb6c4CohlA',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+  const getUtterancesTheme = theme => theme === 'dark' ? 'photon-dark' : 'github-light'
+
+  const loadUtterances = (el = document, key) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyUtterances = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const config = {
+      src: 'https://utteranc.es/client.js',
+      repo: 'S-tanley/blogs',
+      theme: getUtterancesTheme(document.documentElement.getAttribute('data-theme')),
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      'issue-term': isShuoshuo ? key : (option && option['issue-term']) || 'pathname'
+    }
+
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => ele.setAttribute(key, value))
+    el.querySelector('#utterances-wrap').appendChild(ele)
+  }
+
+  const changeUtterancesTheme = theme => {
+    const iframe = document.querySelector('#utterances-wrap iframe')
+    if (iframe) {
+      const message = {
+        type: 'set-theme',
+        theme: getUtterancesTheme(theme)
+      };
+      iframe.contentWindow.postMessage(message, 'https://utteranc.es')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeUtterancesTheme, 'utterances')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Utterances'
+      ? window.shuoshuoComment = { loadComment: loadUtterances }
+      : window.loadOtherComment = loadUtterances
+    return
+  }
+  
+  if ('Giscus' === 'Utterances' || !false) {
+    if (false) btf.loadComment(document.getElementById('utterances-wrap'), loadUtterances)
+    else loadUtterances()
+  } else {
+    window.loadOtherComment = loadUtterances
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/blogs/js/search/local-search.js"></script></div></div></body></html>

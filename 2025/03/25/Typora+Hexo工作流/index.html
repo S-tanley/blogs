@@ -1,0 +1,343 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Typora+Hexo工作流 | Stanley's Blog</title><meta name="author" content="Stanley Zheng"><meta name="copyright" content="Stanley Zheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="你想实现本地Typora进行写作，然后丝滑的推倒你的blog网站吗？本篇blog可以帮你实现这一效果。 为什么会需要解决这个问题？ 通常我们建立一个个人博客网站之后，尤其是如果你是基于Hexo建站的话，你的post全部都是基于md文件的。那么如果正好，你已经习惯了用md文件进行本地写作，那么你一定想要快速的直接把本地的md文件deploy到你的网站上。 如果你没有使用过图床，或者你专门想要把你每个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Typora+Hexo工作流">
+<meta property="og:url" content="https://s-tanley.github.io/blogs/2025/03/25/Typora+Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81/index.html">
+<meta property="og:site_name" content="Stanley&#39;s Blog">
+<meta property="og:description" content="你想实现本地Typora进行写作，然后丝滑的推倒你的blog网站吗？本篇blog可以帮你实现这一效果。 为什么会需要解决这个问题？ 通常我们建立一个个人博客网站之后，尤其是如果你是基于Hexo建站的话，你的post全部都是基于md文件的。那么如果正好，你已经习惯了用md文件进行本地写作，那么你一定想要快速的直接把本地的md文件deploy到你的网站上。 如果你没有使用过图床，或者你专门想要把你每个">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG">
+<meta property="article:published_time" content="2025-03-25T19:26:06.000Z">
+<meta property="article:modified_time" content="2025-03-31T20:30:55.060Z">
+<meta property="article:author" content="Stanley Zheng">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="Personal Blog Website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Typora+Hexo工作流",
+  "url": "https://s-tanley.github.io/blogs/2025/03/25/Typora+Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81/",
+  "image": "https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG",
+  "datePublished": "2025-03-25T19:26:06.000Z",
+  "dateModified": "2025-03-31T20:30:55.060Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Stanley Zheng",
+      "url": "https://s-tanley.github.io/blogs/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/blogs/img/favicon.png"><link rel="canonical" href="https://s-tanley.github.io/blogs/2025/03/25/Typora+Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/blogs/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/blogs/',
+  algolia: undefined,
+  localSearch: {"path":"/blogs/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Typora+Hexo工作流',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">43</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/blogs/"><img class="site-icon" src="/blogs/img/MyProfilePicture.JPG" alt="Logo"><span class="site-name">Stanley's Blog</span></a><a class="nav-page-title" href="/blogs/"><span class="site-name">Typora+Hexo工作流</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Typora+Hexo工作流</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-03-25T19:26:06.000Z" title="Created 2025-03-25 14:26:06">2025-03-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-03-31T20:30:55.060Z" title="Updated 2025-03-31 15:30:55">2025-03-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/blogs/categories/Tech-Blogs/">Tech Blogs</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>你想实现本地Typora进行写作，然后丝滑的推倒你的blog网站吗？本篇blog可以帮你实现这一效果。</p>
+<h1>为什么会需要解决这个问题？</h1>
+<p>通常我们建立一个个人博客网站之后，尤其是如果你是基于Hexo建站的话，你的post全部都是基于md文件的。那么如果正好，你已经习惯了用md文件进行本地写作，那么你一定想要快速的直接把本地的md文件deploy到你的网站上。</p>
+<p>如果你没有使用过图床，或者你专门想要把你每个md文件插入的图片放到一个专门的位置。比如说我，我就是用Typora的高级功能，指定了存图片的地点，这样你的图片即在本地，又分门别类，十分好找。</p>
+<p>现在你再deply到你的blog网站上时，你就会遇到问题了，因为Hexo generate出来的public文件夹里的各个post文件夹里并没有相应的图片。本篇就旨在让你丝滑的将本地文件deply到你的个人blog网站。</p>
+<h1>Hexo Settings</h1>
+<p>想要实现以上的功能，首先对于每一个post，你需要有一个文件夹来存你这post里面的图片。</p>
+<p>你需要将 <code>post_asset_folder: false</code> 改成 <code>post_asset_folder: true</code> 来对每一个post都创建一个文件夹来存这个post里面的图片。</p>
+<p>效果如下：</p>
+<p>使用<code>hexo new post &quot;Hello World&quot;  </code> 创建一个新post。</p>
+<img src="Typora+Hexo工作流/CleanShot 2025-03-25 at 20.01.11.png" alt="CleanShot 2025-03-25 at 20.01.11" style="zoom:75%;" />
+<p>在你的 <code>source/_post</code> 文件夹里，你应该可以看到一个<code>Hello-World</code> 文件夹和一个 <code>Hello-World.md</code> 文件。</p>
+<img src="Typora+Hexo工作流/CleanShot 2025-03-25 at 20.02.41.png" alt="CleanShot 2025-03-25 at 20.02.41" style="zoom:100%;" />
+<p>但是如果你直接 <code>hexo generate</code> 的话，你会在public文件夹，得到一个post文件夹，里面有你的md文件和相应的图片。</p>
+<p>比如在这里，我有 <code>Typora+Hexo工作流.md</code>文件和一个相对应的 <code>Typora+Hexo工作流</code>。</p>
+<img src="Typora+Hexo工作流/CleanShot 2025-03-25 at 20.08.30.png" alt="CleanShot 2025-03-25 at 20.08.30" style="zoom:75%;" />
+<p>但是当我 <code>hexo generate</code> 之后，我会只得到一个文件夹。</p>
+<img src="Typora+Hexo工作流/CleanShot 2025-03-25 at 20.10.26.png" alt="CleanShot 2025-03-25 at 20.10.26" style="zoom:75%;" />
+<p>这就会使得之前的md文件里的图片路径有问题。</p>
+<p>我的解决办法就是把这些图片再塞到一个同名文件夹里，相应的代码在<a target="_blank" rel="noopener" href="https://github.com/S-tanley/Typora-Hexo">这里</a>。将<code>organize_images.py</code> 放在你的Hexo项目根目录下，执行 <code>python organize_images.py</code> 效果如下：</p>
+<img src="Typora+Hexo工作流/CleanShot 2025-03-25 at 20.13.14.png" alt="CleanShot 2025-03-25 at 20.13.14" style="zoom:75%;" />
+<p>这样你的md文件里的图片路径就没有问题啦。</p>
+<p>需要注意的是，我使用的theme是Bytterfly，我不确定是不是所有的theme创建的public文件都是根据日期去创建post文件的，如果不是的话，我的这个文件可能不会work。但是这是一个非常简单的文件，你可以自行更改。</p>
+<h1>Typora Setting</h1>
+<p>如果你是比较会用typora，知道怎么样子才能设置自动保存图片。那你就可以略过这个section，如果你还不太知道，可以继续看。</p>
+<p>非常简单，打开你的Typora，进入<code>Format &gt; Image &gt; Global Image Settings</code>。设置成图片里的样子就可以啦！</p>
+<img src="Typora+Hexo工作流/CleanShot 2025-03-25 at 20.18.30.png" alt="CleanShot 2025-03-25 at 20.18.30" style="zoom:80%;" />
+<ol>
+<li>这个的意思就是同路径下，如果没有的话创建一个跟你md文件同名的folder去存你的图片，如果有的话直接存到这个同名的folder里。这个是专门和Hexo的相匹配上的。</li>
+<li>这个意思是使用相对路径，必须要使用相对路径。</li>
+<li>这个可以加，可以不加，我个人习惯加。但其实如果你deploy到GitHub或者别的网站上的话其实正常应该不叫。但反正加了也能work。</li>
+</ol>
+<p>如果你的不是mac或者你是中文，或者版本不一样，你可以自行搜索一下如何进行修改。</p>
+<p>其实我当时随便搜了一下，就搜到了两三个Hexo来解决这个问题，但是他们都有bug而且没有解决，而且感觉也不会解决了（非常老的repo）。这个问题我感觉也不需要插件这么麻烦，就一个非常简答的脚本就可以解决。</p>
+<p>大概就是这样啦，希望能对你有用，如果你有什么问题，可以发到评论区里。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs">Stanley Zheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs/2025/03/25/Typora+Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81/">https://s-tanley.github.io/blogs/2025/03/25/Typora+Hexo工作流/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blogs/tags/Web/">Web</a><a class="post-meta__tags" href="/blogs/tags/Personal-Blog-Website/">Personal Blog Website</a></div><div class="post-share"><div class="social-share" data-image="/blogs/img/MyProfilePicture.JPG" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/blogs/2025/03/25/%E5%BB%BA%E7%AB%8B%E4%B8%AA%E4%BA%BABlog%E7%BD%91%E7%AB%99/" title="建立个人 Blog 网站"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">建立个人 Blog 网站</div></div><div class="info-2"><div class="info-item-1">耗时两天，也算是成功搭建起了自己的Blog网站，其实之前就有试过搭网站，用的WordPress，其实也算成功，但是似懂非懂，当时又是为了找一个Intern才专门看了看，最后也没被录取，就没继续看相关的技术了，最近正好有时间，就有看了看怎么搭网站，终于成功了，还是挺有意思的，那么作为正式的第一篇Tech...</div></div></div></a><a class="pagination-related" href="/blogs/2025/03/26/GitHub%20%E5%AE%9E%E7%8E%B0%E5%A4%9A%20page%20sit/" title="GitHub 实现多 page site（Hexo框架）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">GitHub 实现多 page site（Hexo框架）</div></div><div class="info-2"><div class="info-item-1">如果你是用通过网上搜到的一些教程去 GitHub 上实现你自己的个人主页的话，你可能会发现大家都会强调你把你的 GitHub repo 的名字命名为 username.github.io。但实际上你可以在任意把任意的 repo 设置成你的项目主页，网上你可以搜到几个相关 GitHub 设置多 page 的帖子，随便放在这里一个，感兴趣可以去再看看。 总之，如果你只想把你基于 Hexo 的 blog deploy 到 GitHub 的话，很简单，只需要改两个 config。 在你的 _config.yml 文件里，把 url 改成 https://&lt;username&gt;.github.io/&lt;reponame&gt;。然后再加一个 root , 这个填成 /&lt;reponame&gt;/ 。其他就正常配置就好了。  我唯一遇到的，可能会出问题的地方，是在那个 page setting 那里。  这里可能不能用 GitHub action，不过我也不确定，但我之前调到 GitHub action 的时候会出问题。如果你发现你 deploy 到 github...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/blogs/2025/03/26/GitHub%20%E5%AE%9E%E7%8E%B0%E5%A4%9A%20page%20sit/" title="GitHub 实现多 page site（Hexo框架）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-26</div><div class="info-item-2">GitHub 实现多 page site（Hexo框架）</div></div><div class="info-2"><div class="info-item-1">如果你是用通过网上搜到的一些教程去 GitHub 上实现你自己的个人主页的话，你可能会发现大家都会强调你把你的 GitHub repo 的名字命名为 username.github.io。但实际上你可以在任意把任意的 repo 设置成你的项目主页，网上你可以搜到几个相关 GitHub 设置多 page 的帖子，随便放在这里一个，感兴趣可以去再看看。 总之，如果你只想把你基于 Hexo 的 blog deploy 到 GitHub 的话，很简单，只需要改两个 config。 在你的 _config.yml 文件里，把 url 改成 https://&lt;username&gt;.github.io/&lt;reponame&gt;。然后再加一个 root , 这个填成 /&lt;reponame&gt;/ 。其他就正常配置就好了。  我唯一遇到的，可能会出问题的地方，是在那个 page setting 那里。  这里可能不能用 GitHub action，不过我也不确定，但我之前调到 GitHub action 的时候会出问题。如果你发现你 deploy 到 github...</div></div></div></a><a class="pagination-related" href="/blogs/2025/03/25/%E5%BB%BA%E7%AB%8B%E4%B8%AA%E4%BA%BABlog%E7%BD%91%E7%AB%99/" title="建立个人 Blog 网站"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-25</div><div class="info-item-2">建立个人 Blog 网站</div></div><div class="info-2"><div class="info-item-1">耗时两天，也算是成功搭建起了自己的Blog网站，其实之前就有试过搭网站，用的WordPress，其实也算成功，但是似懂非懂，当时又是为了找一个Intern才专门看了看，最后也没被录取，就没继续看相关的技术了，最近正好有时间，就有看了看怎么搭网站，终于成功了，还是挺有意思的，那么作为正式的第一篇Tech...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Giscus</span><span id="switch-btn"></span><span class="second-comment">Utterances</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="utterances-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Stanley Zheng</div><div class="author-info-description">Hi, I am Stanley. I am currently a CS student in the University of Wisconsin-Madison. </div><div class="site-data"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">43</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/S-tanley"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://s-tanley.github.io" target="_blank" title="Homepage"><i class="fas fa-id-badge" style="color: #808080;"></i></a><a class="social-icon" href="https://github.com/S-tanley" target="_blank" title="Github"><i class="fab fa-github" style="color: #808080;"></i></a><a class="social-icon" href="mailto:zbowen936@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #808080;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">为什么会需要解决这个问题？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Hexo Settings</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Typora Setting</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/11/Notes---%E8%8B%8F%E5%89%91%E6%9E%97%E5%8D%9A%E5%AE%A2%EF%BC%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%EF%BC%89/" title="Notes---苏剑林博客（神经网络与深度学习基础）">Notes---苏剑林博客（神经网络与深度学习基础）</a><time datetime="2025-08-11T05:00:00.000Z" title="Created 2025-08-11 00:00:00">2025-08-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/" title="多模态中的 Single String 与 Two String">多模态中的 Single String 与 Two String</a><time datetime="2025-08-05T05:00:00.000Z" title="Created 2025-08-05 00:00:00">2025-08-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/14/StreamMUSE/" title="StreamMUSE">StreamMUSE</a><time datetime="2025-07-14T05:00:00.000Z" title="Created 2025-07-14 00:00:00">2025-07-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/12/%E6%A0%87%E5%87%86%E5%8D%B7%E7%A7%AF%E8%BF%87%E7%A8%8B/" title="标准卷积过程">标准卷积过程</a><time datetime="2025-07-12T05:00:00.000Z" title="Created 2025-07-12 00:00:00">2025-07-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/08/Coding%20Diary(2025-7-8)/" title="Coding Diary(2025-7-8)">Coding Diary(2025-7-8)</a><time datetime="2025-07-08T05:00:00.000Z" title="Created 2025-07-08 00:00:00">2025-07-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Stanley Zheng</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/blogs/js/utils.js"></script><script src="/blogs/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"data-mapping":"pathname","data-input-position":"top","data-reactions-enabled":1,"data-strict":1}
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'S-tanley/blogs',
+      'data-repo-id': 'R_kgDOOPJb6Q',
+      'data-category-id': 'DIC_kwDOOPJb6c4CohlA',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+  const getUtterancesTheme = theme => theme === 'dark' ? 'photon-dark' : 'github-light'
+
+  const loadUtterances = (el = document, key) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyUtterances = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const config = {
+      src: 'https://utteranc.es/client.js',
+      repo: 'S-tanley/blogs',
+      theme: getUtterancesTheme(document.documentElement.getAttribute('data-theme')),
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      'issue-term': isShuoshuo ? key : (option && option['issue-term']) || 'pathname'
+    }
+
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => ele.setAttribute(key, value))
+    el.querySelector('#utterances-wrap').appendChild(ele)
+  }
+
+  const changeUtterancesTheme = theme => {
+    const iframe = document.querySelector('#utterances-wrap iframe')
+    if (iframe) {
+      const message = {
+        type: 'set-theme',
+        theme: getUtterancesTheme(theme)
+      };
+      iframe.contentWindow.postMessage(message, 'https://utteranc.es')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeUtterancesTheme, 'utterances')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Utterances'
+      ? window.shuoshuoComment = { loadComment: loadUtterances }
+      : window.loadOtherComment = loadUtterances
+    return
+  }
+  
+  if ('Giscus' === 'Utterances' || !false) {
+    if (false) btf.loadComment(document.getElementById('utterances-wrap'), loadUtterances)
+    else loadUtterances()
+  } else {
+    window.loadOtherComment = loadUtterances
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/blogs/js/search/local-search.js"></script></div></div></body></html>

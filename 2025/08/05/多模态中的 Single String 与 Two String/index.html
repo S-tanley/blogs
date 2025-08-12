@@ -1,0 +1,407 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>多模态中的 Single String 与 Two String | Stanley's Blog</title><meta name="author" content="Stanley Zheng"><meta name="copyright" content="Stanley Zheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="多模态AI如何理解世界？一文读懂单序列与双序列模型 多模态人工智能的浪潮正在席卷而来，从能够理解图片和文字的 LLaVA，到能生成视频的 Sora，AI 正在以前所未有的方式将不同类型的信息联系起来。 那么，这些多模态模型究竟是如何将图像、文本等不同模态的信息融合在一起的呢？ 目前，主流的架构可以归纳为两大阵营：**单序列（Single String）**和双序列（Two String）。理解这两">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多模态中的 Single String 与 Two String">
+<meta property="og:url" content="https://s-tanley.github.io/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/index.html">
+<meta property="og:site_name" content="Stanley&#39;s Blog">
+<meta property="og:description" content="多模态AI如何理解世界？一文读懂单序列与双序列模型 多模态人工智能的浪潮正在席卷而来，从能够理解图片和文字的 LLaVA，到能生成视频的 Sora，AI 正在以前所未有的方式将不同类型的信息联系起来。 那么，这些多模态模型究竟是如何将图像、文本等不同模态的信息融合在一起的呢？ 目前，主流的架构可以归纳为两大阵营：**单序列（Single String）**和双序列（Two String）。理解这两">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG">
+<meta property="article:published_time" content="2025-08-05T05:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-06T19:15:08.688Z">
+<meta property="article:author" content="Stanley Zheng">
+<meta property="article:tag" content="Multimodal">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "多模态中的 Single String 与 Two String",
+  "url": "https://s-tanley.github.io/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/",
+  "image": "https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG",
+  "datePublished": "2025-08-05T05:00:00.000Z",
+  "dateModified": "2025-08-06T19:15:08.688Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Stanley Zheng",
+      "url": "https://s-tanley.github.io/blogs/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/blogs/img/favicon.png"><link rel="canonical" href="https://s-tanley.github.io/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/blogs/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/blogs/',
+  algolia: undefined,
+  localSearch: {"path":"/blogs/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '多模态中的 Single String 与 Two String',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">43</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/blogs/"><img class="site-icon" src="/blogs/img/MyProfilePicture.JPG" alt="Logo"><span class="site-name">Stanley's Blog</span></a><a class="nav-page-title" href="/blogs/"><span class="site-name">多模态中的 Single String 与 Two String</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">多模态中的 Single String 与 Two String</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-08-05T05:00:00.000Z" title="Created 2025-08-05 00:00:00">2025-08-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-08-06T19:15:08.688Z" title="Updated 2025-08-06 14:15:08">2025-08-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/blogs/categories/Research-Blogs/">Research Blogs</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="多模态AI如何理解世界？一文读懂单序列与双序列模型">多模态AI如何理解世界？一文读懂单序列与双序列模型</h3>
+<p>多模态人工智能的浪潮正在席卷而来，从能够理解图片和文字的 LLaVA，到能生成视频的 Sora，AI 正在以前所未有的方式将不同类型的信息联系起来。</p>
+<p>那么，这些多模态模型究竟是如何将图像、文本等不同模态的信息融合在一起的呢？</p>
+<p>目前，主流的架构可以归纳为两大阵营：**单序列（Single String）**和双序列（Two String）。理解这两种范式，就能抓住多模态模型的核心。</p>
+<hr>
+<h4 id="1-单序列（Single-String）方法：一次看懂，全局理解">1. 单序列（Single String）方法：一次看懂，全局理解</h4>
+<p><strong>核心思想</strong>：将所有模态的数据都转化为同一种“语言”（Token），然后将它们像串珠子一样拼接成一个长长的序列，交给一个统一的 Transformer 模型进行处理。</p>
+<p>这就像是“<strong>一图胜千言</strong>”。模型将图像视为一长串“视觉词汇”，将它们与文本中的普通词汇放在一起，在同一个注意力空间中进行交互和理解。</p>
+<ul>
+<li><strong>工作流程</strong>：
+<ol>
+<li><strong>图像编码</strong>：将一张图片分割成许多小块（Patches）。</li>
+<li><strong>特征投影</strong>：使用一个视觉编码器将这些 Patches 转化为一系列图像 Token，并投影到与文本 Token 相同的嵌入空间。</li>
+<li><strong>序列拼接</strong>：将图像 Token 序列与文本 Token 序列拼接起来，通常还会用特殊分隔符（如 <code>[IMG_START]</code>）进行标记。</li>
+<li><strong>统一处理</strong>：将拼接后的长序列一次性输入给一个统一的 Transformer 模型。</li>
+</ol>
+</li>
+<li><strong>优点</strong>：
+<ul>
+<li><strong>架构简单</strong>：只需一个 Transformer 模型，无需额外的复杂融合层。</li>
+<li><strong>隐式对齐</strong>：模型通过全局自注意力机制，自然地学习图像和文本之间的对齐关系。</li>
+</ul>
+</li>
+<li><strong>缺点</strong>：
+<ul>
+<li><strong>计算成本高</strong>：自注意力机制的计算复杂度与序列长度的平方成正比。图像 Token 数量多，拼接后序列变得很长，导致计算量巨大。</li>
+</ul>
+</li>
+<li><strong>代表模型</strong>：LLaVA, Flamingo, IDEFICS。</li>
+</ul>
+<hr>
+<h4 id="2-双序列（Two-String）方法：分而治之，最后融合">2. 双序列（Two String）方法：分而治之，最后融合</h4>
+<p><strong>核心思想</strong>：对不同模态的数据使用独立的、专门的编码器进行处理。在处理的后期，再通过一个专门的“融合”模块将不同模态的特征结合起来。</p>
+<p>这就像是“<strong>分开阅读，再独立思考</strong>”。模型先独立地“看”图片，再独立地“读”文本，最后再“思考”如何将两者联系起来。</p>
+<ul>
+<li><strong>工作流程</strong>：
+<ol>
+<li><strong>文本编码</strong>：使用一个文本编码器（如 BERT）将文本序列编码为文本特征。</li>
+<li><strong>图像编码</strong>：使用一个图像编码器（如 ViT）将图像编码为图像特征。</li>
+<li><strong>专门融合</strong>：将两个编码器输出的特征向量（或序列）送入一个融合层，通过**交叉注意力（Cross-Attention）**或简单的拼接，来学习和融合跨模态的信息。</li>
+</ol>
+</li>
+<li><strong>优点</strong>：
+<ul>
+<li><strong>计算高效</strong>：每个编码器处理较短的序列，计算成本更低。</li>
+<li><strong>模态特化</strong>：可以为每个模态使用最适合的预训练模型和架构，灵活性高。</li>
+</ul>
+</li>
+<li><strong>缺点</strong>：
+<ul>
+<li><strong>架构复杂</strong>：需要设计和训练一个有效的融合机制，这比单流模型更具挑战性。</li>
+<li><strong>对齐显式化</strong>：模型必须显式地学习如何对齐两个独立的特征，如果融合层设计不当，会限制性能。</li>
+</ul>
+</li>
+<li><strong>代表模型</strong>：CLIP (经典的双编码器模型), VisualBERT。</li>
+</ul>
+<hr>
+<h4 id="3-对比总结：如何选择？">3. 对比总结：如何选择？</h4>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th><strong>单序列（Single String）</strong></th>
+<th><strong>双序列（Two String）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>核心思想</strong></td>
+<td>统一所有模态为一长串 Token</td>
+<td>分别编码，后期专门融合</td>
+</tr>
+<tr>
+<td><strong>架构</strong></td>
+<td>单个统一的 Transformer 模型</td>
+<td>独立编码器 + 融合模块</td>
+</tr>
+<tr>
+<td><strong>计算成本</strong></td>
+<td>较高（与总序列长度的平方成正比）</td>
+<td>较低（编码器内部并行，融合层成本可控）</td>
+</tr>
+<tr>
+<td><strong>主要优势</strong></td>
+<td>架构简单，对齐自然</td>
+<td>灵活性高，计算更高效</td>
+</tr>
+<tr>
+<td><strong>典型模型</strong></td>
+<td>LLaVA, Flamingo, IDEFICS</td>
+<td>CLIP, VisualBERT</td>
+</tr>
+</tbody>
+</table>
+<p><strong>如何选择？</strong></p>
+<ul>
+<li>如果你追求<strong>极致的性能</strong>，并且希望模型在多模态数据之间建立最细致的、隐式的联系，<strong>单序列模型</strong>可能是更好的选择。</li>
+<li>如果你更看重<strong>计算效率、灵活性</strong>，希望在已有预训练模型上快速构建，或者需要将模型部署到资源受限的设备上，<strong>双序列模型</strong>可能更具优势。</li>
+</ul>
+<p>这两种范式都在不断演进，为我们打开了通往真正多模态AI世界的大门。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs">Stanley Zheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/">https://s-tanley.github.io/blogs/2025/08/05/多模态中的 Single String 与 Two String/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blogs/tags/Multimodal/">Multimodal</a></div><div class="post-share"><div class="social-share" data-image="/blogs/img/MyProfilePicture.JPG" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/blogs/2025/07/14/StreamMUSE/" title="StreamMUSE"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">StreamMUSE</div></div><div class="info-2"><div class="info-item-1">Fake Offline def fake_offline():	model = load_from_checkpoint(model_path)    # Convert midi file to tensor  # midi file -&gt; [1, num_logical_ticks, max_polyphony*2]  x_mel, x_acc = conter_midi_to_tensor(midi_path)    # fake inference round  for i in range(n_round):    # get right prompts    prompt_length_i = prompt_length + i*gen_interval_ticks  	x_mel_pre = get_proper_mel_prompt_length(prompt_length_i)    x_acc_pre = get_proper_acc_prompt_length(prompt_length_i)    x =...</div></div></div></a><a class="pagination-related" href="/blogs/2025/08/11/Notes---%E8%8B%8F%E5%89%91%E6%9E%97%E5%8D%9A%E5%AE%A2%EF%BC%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%EF%BC%89/" title="Notes---苏剑林博客（神经网络与深度学习基础）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Notes---苏剑林博客（神经网络与深度学习基础）</div></div><div class="info-2"><div class="info-item-1">其实很久之前就看到过别人推荐他的 blog 了，但是一直没看，最近虽然也很忙，但是总是不想干“正事”，就忙里偷闲，看看能不能把他的 blog 读完吧。 我的 Reading List 主要是根据知乎上一个同学（WhyWait）整理的，所以也就按照他的分类来读了。 这一篇 Notes 就是关于“神经网络与深度学习基础”这个分类底下的 Blog，希望这一次自己能够坚持下来，至少把和自己相关的部分看完。 闲聊：神经网络与深度学习 这篇博客写在 2015 年，但其实里面的很多想法到今天也很有用，从某种程度上从底层解释了神经网络从何而来，为什么能 work。 大部分人都知道，神经网络其实就是一个拟合函数，虽然网络里的单个节点只是一个非常简单的函数，但是大家也都知道我们已经证明了只要我们把足够多的这种简单函数复合到一起，可以拟合任意一种函数。 大部分也知道，很多时候神经网络其实干的事情是“抽特征”，如果你特征抽的好，只需要一个非常简单的 MLP 就可以去的很好的效果。 可其实大部分人都没有系统的知道，上面这两点就是我们的 key...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Giscus</span><span id="switch-btn"></span><span class="second-comment">Utterances</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="utterances-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Stanley Zheng</div><div class="author-info-description">Hi, I am Stanley. I am currently a CS student in the University of Wisconsin-Madison. </div><div class="site-data"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">43</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/S-tanley"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://s-tanley.github.io" target="_blank" title="Homepage"><i class="fas fa-id-badge" style="color: #808080;"></i></a><a class="social-icon" href="https://github.com/S-tanley" target="_blank" title="Github"><i class="fab fa-github" style="color: #808080;"></i></a><a class="social-icon" href="mailto:zbowen936@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #808080;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81AI%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E4%B8%96%E7%95%8C%EF%BC%9F%E4%B8%80%E6%96%87%E8%AF%BB%E6%87%82%E5%8D%95%E5%BA%8F%E5%88%97%E4%B8%8E%E5%8F%8C%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">多模态AI如何理解世界？一文读懂单序列与双序列模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%8D%95%E5%BA%8F%E5%88%97%EF%BC%88Single-String%EF%BC%89%E6%96%B9%E6%B3%95%EF%BC%9A%E4%B8%80%E6%AC%A1%E7%9C%8B%E6%87%82%EF%BC%8C%E5%85%A8%E5%B1%80%E7%90%86%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">1. 单序列（Single String）方法：一次看懂，全局理解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%8F%8C%E5%BA%8F%E5%88%97%EF%BC%88Two-String%EF%BC%89%E6%96%B9%E6%B3%95%EF%BC%9A%E5%88%86%E8%80%8C%E6%B2%BB%E4%B9%8B%EF%BC%8C%E6%9C%80%E5%90%8E%E8%9E%8D%E5%90%88"><span class="toc-number">1.2.</span> <span class="toc-text">2. 双序列（Two String）方法：分而治之，最后融合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%AF%B9%E6%AF%94%E6%80%BB%E7%BB%93%EF%BC%9A%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">3. 对比总结：如何选择？</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/11/Notes---%E8%8B%8F%E5%89%91%E6%9E%97%E5%8D%9A%E5%AE%A2%EF%BC%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%EF%BC%89/" title="Notes---苏剑林博客（神经网络与深度学习基础）">Notes---苏剑林博客（神经网络与深度学习基础）</a><time datetime="2025-08-11T05:00:00.000Z" title="Created 2025-08-11 00:00:00">2025-08-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/" title="多模态中的 Single String 与 Two String">多模态中的 Single String 与 Two String</a><time datetime="2025-08-05T05:00:00.000Z" title="Created 2025-08-05 00:00:00">2025-08-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/14/StreamMUSE/" title="StreamMUSE">StreamMUSE</a><time datetime="2025-07-14T05:00:00.000Z" title="Created 2025-07-14 00:00:00">2025-07-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/12/%E6%A0%87%E5%87%86%E5%8D%B7%E7%A7%AF%E8%BF%87%E7%A8%8B/" title="标准卷积过程">标准卷积过程</a><time datetime="2025-07-12T05:00:00.000Z" title="Created 2025-07-12 00:00:00">2025-07-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/08/Coding%20Diary(2025-7-8)/" title="Coding Diary(2025-7-8)">Coding Diary(2025-7-8)</a><time datetime="2025-07-08T05:00:00.000Z" title="Created 2025-07-08 00:00:00">2025-07-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Stanley Zheng</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/blogs/js/utils.js"></script><script src="/blogs/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"data-mapping":"pathname","data-input-position":"top","data-reactions-enabled":1,"data-strict":1}
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'S-tanley/blogs',
+      'data-repo-id': 'R_kgDOOPJb6Q',
+      'data-category-id': 'DIC_kwDOOPJb6c4CohlA',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+  const getUtterancesTheme = theme => theme === 'dark' ? 'photon-dark' : 'github-light'
+
+  const loadUtterances = (el = document, key) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyUtterances = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const config = {
+      src: 'https://utteranc.es/client.js',
+      repo: 'S-tanley/blogs',
+      theme: getUtterancesTheme(document.documentElement.getAttribute('data-theme')),
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      'issue-term': isShuoshuo ? key : (option && option['issue-term']) || 'pathname'
+    }
+
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => ele.setAttribute(key, value))
+    el.querySelector('#utterances-wrap').appendChild(ele)
+  }
+
+  const changeUtterancesTheme = theme => {
+    const iframe = document.querySelector('#utterances-wrap iframe')
+    if (iframe) {
+      const message = {
+        type: 'set-theme',
+        theme: getUtterancesTheme(theme)
+      };
+      iframe.contentWindow.postMessage(message, 'https://utteranc.es')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeUtterancesTheme, 'utterances')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Utterances'
+      ? window.shuoshuoComment = { loadComment: loadUtterances }
+      : window.loadOtherComment = loadUtterances
+    return
+  }
+  
+  if ('Giscus' === 'Utterances' || !false) {
+    if (false) btf.loadComment(document.getElementById('utterances-wrap'), loadUtterances)
+    else loadUtterances()
+  } else {
+    window.loadOtherComment = loadUtterances
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/blogs/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Reading Notes for vLLM | Stanley's Blog</title><meta name="author" content="Stanley Zheng"><meta name="copyright" content="Stanley Zheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="This is the reading note for the Efficient Memory Management for Large Language Model Serving with PagedAttention. vLLM is one of the most popular open-source inference serving systems nowadays. Basic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reading Notes for vLLM">
+<meta property="og:url" content="https://s-tanley.github.io/blogs/2025/05/27/vLLM/index.html">
+<meta property="og:site_name" content="Stanley&#39;s Blog">
+<meta property="og:description" content="This is the reading note for the Efficient Memory Management for Large Language Model Serving with PagedAttention. vLLM is one of the most popular open-source inference serving systems nowadays. Basic">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG">
+<meta property="article:published_time" content="2025-05-27T05:00:00.000Z">
+<meta property="article:modified_time" content="2025-06-11T07:39:56.350Z">
+<meta property="article:author" content="Stanley Zheng">
+<meta property="article:tag" content="MLSys">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Reading Notes for vLLM",
+  "url": "https://s-tanley.github.io/blogs/2025/05/27/vLLM/",
+  "image": "https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG",
+  "datePublished": "2025-05-27T05:00:00.000Z",
+  "dateModified": "2025-06-11T07:39:56.350Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Stanley Zheng",
+      "url": "https://s-tanley.github.io/blogs/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/blogs/img/favicon.png"><link rel="canonical" href="https://s-tanley.github.io/blogs/2025/05/27/vLLM/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/blogs/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/blogs/',
+  algolia: undefined,
+  localSearch: {"path":"/blogs/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Reading Notes for vLLM',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">43</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/blogs/"><img class="site-icon" src="/blogs/img/MyProfilePicture.JPG" alt="Logo"><span class="site-name">Stanley's Blog</span></a><a class="nav-page-title" href="/blogs/"><span class="site-name">Reading Notes for vLLM</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Reading Notes for vLLM</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-05-27T05:00:00.000Z" title="Created 2025-05-27 00:00:00">2025-05-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-06-11T07:39:56.350Z" title="Updated 2025-06-11 02:39:56">2025-06-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/blogs/categories/Reading-Paper/">Reading Paper</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>This is the reading note for the <em>Efficient Memory Management for Large Language Model Serving with PagedAttention</em>. vLLM is one of the most popular open-source inference serving systems nowadays. Basically, there are two mainstream inference serving systems: one is vLLM, and the other is SGLang.</p>
+<h1>Summary</h1>
+<h2 id="Abstract-Introduction-Background">Abstract &amp; Introduction &amp; Background</h2>
+<p>This is a paper about the vLLM, a serving system for inference. The most important idea they propose is PagedAttention. vLLM with the PagedAttention &quot; achieves (1) near-zero waste in KV cache memory and (2) flexible sharing of KV cache within and across requests to further reduce memory usage.&quot;</p>
+<img src="./vLLM/CleanShot 2025-06-08 at 17.54.40@2x.png" alt="CleanShot 2025-06-08 at 17.54.40@2x" style="zoom:37%;" />
+<p>In inference, we use a lot of memory to store keys and values since we’ll repeatedly use them in our iterations.</p>
+<p>However, the previous algorithms waste a lot of memory.</p>
+<img src="./vLLM/CleanShot 2025-06-08 at 17.59.20@2x.png" alt="CleanShot 2025-06-08 at 17.59.20@2x" style="zoom:33%;" />
+<p>Authors use PagedAttention to solve these limitations.</p>
+<p>The background does not have too much to summarize, just a summary of the transformer model and the limitation of the current memory management strategy.</p>
+<img src="./vLLM/CleanShot 2025-06-08 at 18.19.35@2x.png" alt="CleanShot 2025-06-08 at 18.19.35@2x" style="zoom:33%;" />
+<p>Figure 3 clearly shows why the reservation and the fragmentation waste too much memory.</p>
+<h2 id="Method">Method</h2>
+<p>The main idea of the PagedAttention is just like the virtual memory of the current OS.</p>
+<img src="./vLLM/CleanShot 2025-06-08 at 20.17.37@2x.png" alt="CleanShot 2025-06-08 at 20.17.37@2x" style="zoom:33%;" />
+<p>For every query, the query just thinks the corresponding K/V is contiguous, and actually, we maintain a sheet to record the actual location of each fragment of the K/V.</p>
+<img src="./vLLM/CleanShot 2025-06-08 at 20.21.32@2x.png" alt="CleanShot 2025-06-08 at 20.21.32@2x" style="zoom:33%;" />
+<p>Figure 5 shows how the K/V can be managed.</p>
+<img src="./vLLM/CleanShot 2025-06-08 at 20.23.05@2x.png" alt="CleanShot 2025-06-08 at 20.23.05@2x" style="zoom:33%;" />
+<img src="./vLLM/CleanShot 2025-06-08 at 20.23.39@2x.png" alt="CleanShot 2025-06-08 at 20.23.39@2x" style="zoom:33%;" />
+<img src="./vLLM/CleanShot 2025-06-08 at 20.25.31@2x.png" alt="CleanShot 2025-06-08 at 20.25.31@2x" style="zoom:33%;" />
+<p>Figure 6, 7, 8, 9, and 10 tell us some details of PagedAttention. I think these figures are clear enough.</p>
+<p>Also, a key challenge in serving Large Language Models is that as the outputs grow with each iteration, the system can run out of GPU’s physical blocks to store the newly generated KV cache. To address this, vLLM considers two main techniques to recover the KV cache for preempted requests:</p>
+<ul>
+<li>Swapping</li>
+<li>Recomputation</li>
+</ul>
+<p>In the end, they talk a little about the distributed training.</p>
+<h2 id="Implementation-Evaluation-Ablation-Studies">Implementation &amp; Evaluation &amp; Ablation Studies</h2>
+<p>For the implementation, I think there are three techniques we should pay attention to:</p>
+<ul>
+<li>Fused reshape and block write</li>
+<li>Fusing block read and attention</li>
+<li>Fused block copy</li>
+</ul>
+<p>They also mention that they create many methods that should be enough for future development.</p>
+<p>The evaluation part do not have too much to talk about, I just put their figure here:</p>
+<img src="./vLLM/CleanShot 2025-06-11 at 10.25.51@2x.png" alt="CleanShot 2025-06-11 at 10.25.51@2x" style="zoom:33%;" />
+<img src="./vLLM/CleanShot 2025-06-11 at 10.26.42@2x.png" alt="CleanShot 2025-06-11 at 10.26.42@2x" style="zoom:33%;" />
+<img src="./vLLM/CleanShot 2025-06-11 at 10.27.02@2x.png" alt="CleanShot 2025-06-11 at 10.27.02@2x" style="zoom:33%;" />
+<img src="./vLLM/CleanShot 2025-06-11 at 10.27.25@2x.png" alt="CleanShot 2025-06-11 at 10.27.25@2x" style="zoom:33%;" />
+<img src="./vLLM/CleanShot 2025-06-11 at 10.27.49@2x.png" alt="CleanShot 2025-06-11 at 10.27.49@2x" style="zoom:33%;" />
+<img src="./vLLM/CleanShot 2025-06-11 at 10.28.06@2x.png" alt="CleanShot 2025-06-11 at 10.28.06@2x" style="zoom:33%;" />
+<p>Basically, what they do is just elaborate the figrues.</p>
+<p>In the ablation study, they found that</p>
+<ul>
+<li>
+<p>the kernal latency of PagedAttention is a little high but vLLM still way better in the end-to-end performance.</p>
+</li>
+<li>
+<p>the best block size is typically 16.</p>
+</li>
+<li>
+<p>the recompution and swapping is basically same when block size is from 16 to 64.</p>
+</li>
+</ul>
+<h2 id="Discussion-Related-Work-Conclusion">Discussion &amp; Related Work &amp; Conclusion</h2>
+<p>These part I think is already very concise, and also intersting, so I’ll not do the summaries.</p>
+<h1>Thoughts</h1>
+<p>In this paper, the author mentioned something called “cellular batching”. I searched a little, and it’s actually kind of similar to the Ideas(Thoughts &gt; Ideas) I wrote in the <a href="https://s-tanley.github.io/blogs/2025/05/15/Orca/">blog for Orca</a>.</p>
+<h3 id="About-the-Swapping-and-Recomputation">About the Swapping and Recomputation</h3>
+<ul>
+<li>
+<p>Swapping: This is just using the CPU memory, which is very common technique in current OS.</p>
+</li>
+<li>
+<p>Recomputation: This is just throwing away all the K and V, only keeping the sequences we have already generated. We need to know that the recomputation is faster than the normal generation, since we only need one iteration to catch up. This is also very common in the current LLM training system. During the training process, we’ll get some intermediate computation results in the forward step, and these results are useful when we do the backward propagation. However, sometimes the GPU memory is not enough, so we’ll just throw away these results, and when we need them, we recompute them.</p>
+<p>Basically, this is a way to use time for space. Actually, system work is all about suitable tradeoffs.</p>
+</li>
+</ul>
+<h3 id="About-the-Disscussion-of-the-Paging-Technique">About the Disscussion of the Paging Technique</h3>
+<p>This is actually interesing. The PagedAttention only work for the transformer architecture, this is obvious, since if you are not transformer, you even don’t have the attention. However, it’s actually more than that, the PagedAttenion is actually only very useful for LLM, the KV cache for LLM is dynamic. If we got some ViT, I think every output size is fixed, so the KV cache should be predictable.</p>
+<p>Still, as long as the output sequence is flexible, unpredictable. The vLLM should work well.</p>
+<p>Also, I think vLLM is kind of like using space for time. It’s like we make for room for KV cache, the result what we see is it’s faster, since it can batch more requests at one time.</p>
+<h2 id="Confusion">Confusion</h2>
+<p>No confusion in this paper😂.</p>
+<h2 id="Ideas">Ideas</h2>
+<h3 id="About-copy-on-write-mechanism">About <em>copy-on write</em> mechanism</h3>
+<p>I just thought what if we just abandon the rest, and start two new blocks. I think we can calculate some probabilities about this idea.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs">Stanley Zheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs/2025/05/27/vLLM/">https://s-tanley.github.io/blogs/2025/05/27/vLLM/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blogs/tags/MLSys/">MLSys</a></div><div class="post-share"><div class="social-share" data-image="/blogs/img/MyProfilePicture.JPG" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/blogs/2025/05/27/SGLang/" title="Reading Notes for SGLang"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Reading Notes for SGLang</div></div></div></a><a class="pagination-related" href="/blogs/2025/06/10/Resource%20I%20have%20for%20MLSys/" title="Resource I Have for MLSys"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Resource I Have for MLSys</div></div><div class="info-2"><div class="info-item-1">This is like a guidance page for the resources I know for MLSys, I’ll give a brief introduction to each of them and list the link here. The resources will contain books, papers, and notes I wrote. Books AI System This book is more about the hardware. I think it’s a little bit like for ECE students. I haven’t read it all yet, but I think you can find some useful topics here, such as the introduction to Nvidia GPUs, the Tensor Core, stream multiprocessors, and how the GPU actually do to...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/blogs/2025/04/07/AllReduce%20&%20Bucketing/" title="AllReduce &amp; Bucketing"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-07</div><div class="info-item-2">AllReduce &amp; Bucketing</div></div><div class="info-2"><div class="info-item-1">本文主要介绍了 AllReduce 和 Bucketing 分别是什么，和他们之间的联系。 一、AllReduce 是什么？ AllReduce 是分布式训练中的一种集体通信操作， 用于在多个 GPU（worker）之间同步张量（通常是梯度）。 典型流程如下：  每个 GPU 独立计算自己的梯度张量（如 grad）。 所有 GPU 通过 AllReduce 操作，将各自的张量求和/平均，获得全局一致的梯度。 每个 GPU 使用这个同步后的梯度更新模型参数。  AllReduce 是数据并行训练中实现模型同步的关键机制。  二、为什么 AllReduce 会成为性能瓶颈？  模型中参数众多，梯度张量数量也很多。 每个张量如果单独 AllReduce，通信次数极多。 小张量通信无法充分利用带宽，且频繁启动通信带来显著延迟（latency）。   三、Bucketing 是什么？ Bucketing 是一种优化 AllReduce 通信效率的策略， 将多个小张量合并成一个大 “bucket”，再一次性执行 AllReduce。 核心思想：Batch Small Reduces...</div></div></div></a><a class="pagination-related" href="/blogs/2025/03/28/FasterMoE/" title="Reading Notes for FasterMoE"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-28</div><div class="info-item-2">Reading Notes for FasterMoE</div></div><div class="info-2"><div class="info-item-1">Summary Abstract &amp; Introduction &amp;  Background and Challenges 前面又是简单介绍MoE，基本都一样。 这个也是training方向的，说了三个challenges：   dynamic load imbalance 在intro里，叫Dynamic expert selection，就也比较明显，就是每次选的experts不一样。   inefficient synchronous execution mode 在intro里，叫Inefficient synchronous operations，就是expert有dependency，就需要别的worker的data，要等。   congested all-to-all communication 在intro里，叫Mismatch of model design and network topology，感觉他的意思是现在的system只管摆放experts的computation...</div></div></div></a><a class="pagination-related" href="/blogs/2025/04/07/MoE%20%E4%B8%AD%20All-to-All%20%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/" title="MoE 中 All-to-All 通信机制"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-07</div><div class="info-item-2">MoE 中 All-to-All 通信机制</div></div><div class="info-2"><div class="info-item-1">本文主要介绍了 All-to-All 通信机制，以及为什么需要这个机制。 一、All-to-All 是什么？ 在分布式 Mixture-of-Experts（MoE）模型中，All-to-All 是一种通信操作， 用于在多个 GPU 之间交换 token 和专家（Expert）之间的数据。 每个 GPU 上都有输入 token，而每个 Expert 分布在多个不同的 GPU 上。 Gate 网络决定每个 token 应该由哪些专家处理，因此 token 需要被动态发送到目标 Expert 所在的 GPU。 这正是 All-to-All：每个 GPU 既向其他 GPU 发送数据，也接收来自其他 GPU 的数据。  二、为什么 MoE 模型需要 All-to-All？ 1. Expert 是独立的，但 Token 是全局的  每个 Expert 的参数是本地的，只存在于某个 GPU 上。 但 token 是通过数据并行划分的，分布在所有 GPU 上。 每个 token 的 gate 结果可能指向任意 GPU 上的 Expert。  因此，token 必须被跨设备发送到它所选中的...</div></div></div></a><a class="pagination-related" href="/blogs/2025/05/15/Orca/" title="Reading Notes for Orca"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-15</div><div class="info-item-2">Reading Notes for Orca</div></div><div class="info-2"><div class="info-item-1">This is the reading notes for the ORCA: A Distributed Serving System for Transformer-Based Generative Models. This is an OSDI conference paper from 2022. Almost all the authors come from South Korea, and actually, this is the first time I have read papers written by Koreans. Summary Abstract &amp; Introduction &amp; Background The paper is focused on the inference serving, they point out that the existing system is not good enough for transformer-based models. So, they propose a new method...</div></div></div></a><a class="pagination-related" href="/blogs/2025/06/10/Resource%20I%20have%20for%20MLSys/" title="Resource I Have for MLSys"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-10</div><div class="info-item-2">Resource I Have for MLSys</div></div><div class="info-2"><div class="info-item-1">This is like a guidance page for the resources I know for MLSys, I’ll give a brief introduction to each of them and list the link here. The resources will contain books, papers, and notes I wrote. Books AI System This book is more about the hardware. I think it’s a little bit like for ECE students. I haven’t read it all yet, but I think you can find some useful topics here, such as the introduction to Nvidia GPUs, the Tensor Core, stream multiprocessors, and how the GPU actually do to...</div></div></div></a><a class="pagination-related no-desc" href="/blogs/2025/05/27/SGLang/" title="Reading Notes for SGLang"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-27</div><div class="info-item-2">Reading Notes for SGLang</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Giscus</span><span id="switch-btn"></span><span class="second-comment">Utterances</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="utterances-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Stanley Zheng</div><div class="author-info-description">Hi, I am Stanley. I am currently a CS student in the University of Wisconsin-Madison. </div><div class="site-data"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">43</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/S-tanley"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://s-tanley.github.io" target="_blank" title="Homepage"><i class="fas fa-id-badge" style="color: #808080;"></i></a><a class="social-icon" href="https://github.com/S-tanley" target="_blank" title="Github"><i class="fab fa-github" style="color: #808080;"></i></a><a class="social-icon" href="mailto:zbowen936@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #808080;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Summary</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Abstract-Introduction-Background"><span class="toc-number">1.1.</span> <span class="toc-text">Abstract &amp; Introduction &amp; Background</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-number">1.2.</span> <span class="toc-text">Method</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Implementation-Evaluation-Ablation-Studies"><span class="toc-number">1.3.</span> <span class="toc-text">Implementation &amp; Evaluation &amp; Ablation Studies</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Discussion-Related-Work-Conclusion"><span class="toc-number">1.4.</span> <span class="toc-text">Discussion &amp; Related Work &amp; Conclusion</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Thoughts</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#About-the-Swapping-and-Recomputation"><span class="toc-number">2.0.1.</span> <span class="toc-text">About the Swapping and Recomputation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#About-the-Disscussion-of-the-Paging-Technique"><span class="toc-number">2.0.2.</span> <span class="toc-text">About the Disscussion of the Paging Technique</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Confusion"><span class="toc-number">2.1.</span> <span class="toc-text">Confusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ideas"><span class="toc-number">2.2.</span> <span class="toc-text">Ideas</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#About-copy-on-write-mechanism"><span class="toc-number">2.2.1.</span> <span class="toc-text">About copy-on write mechanism</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/11/Notes---%E8%8B%8F%E5%89%91%E6%9E%97%E5%8D%9A%E5%AE%A2%EF%BC%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%EF%BC%89/" title="Notes---苏剑林博客（神经网络与深度学习基础）">Notes---苏剑林博客（神经网络与深度学习基础）</a><time datetime="2025-08-11T05:00:00.000Z" title="Created 2025-08-11 00:00:00">2025-08-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/" title="多模态中的 Single String 与 Two String">多模态中的 Single String 与 Two String</a><time datetime="2025-08-05T05:00:00.000Z" title="Created 2025-08-05 00:00:00">2025-08-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/14/StreamMUSE/" title="StreamMUSE">StreamMUSE</a><time datetime="2025-07-14T05:00:00.000Z" title="Created 2025-07-14 00:00:00">2025-07-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/12/%E6%A0%87%E5%87%86%E5%8D%B7%E7%A7%AF%E8%BF%87%E7%A8%8B/" title="标准卷积过程">标准卷积过程</a><time datetime="2025-07-12T05:00:00.000Z" title="Created 2025-07-12 00:00:00">2025-07-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/07/08/Coding%20Diary(2025-7-8)/" title="Coding Diary(2025-7-8)">Coding Diary(2025-7-8)</a><time datetime="2025-07-08T05:00:00.000Z" title="Created 2025-07-08 00:00:00">2025-07-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Stanley Zheng</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/blogs/js/utils.js"></script><script src="/blogs/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"data-mapping":"pathname","data-input-position":"top","data-reactions-enabled":1,"data-strict":1}
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'S-tanley/blogs',
+      'data-repo-id': 'R_kgDOOPJb6Q',
+      'data-category-id': 'DIC_kwDOOPJb6c4CohlA',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+  const getUtterancesTheme = theme => theme === 'dark' ? 'photon-dark' : 'github-light'
+
+  const loadUtterances = (el = document, key) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyUtterances = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const config = {
+      src: 'https://utteranc.es/client.js',
+      repo: 'S-tanley/blogs',
+      theme: getUtterancesTheme(document.documentElement.getAttribute('data-theme')),
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      'issue-term': isShuoshuo ? key : (option && option['issue-term']) || 'pathname'
+    }
+
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => ele.setAttribute(key, value))
+    el.querySelector('#utterances-wrap').appendChild(ele)
+  }
+
+  const changeUtterancesTheme = theme => {
+    const iframe = document.querySelector('#utterances-wrap iframe')
+    if (iframe) {
+      const message = {
+        type: 'set-theme',
+        theme: getUtterancesTheme(theme)
+      };
+      iframe.contentWindow.postMessage(message, 'https://utteranc.es')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeUtterancesTheme, 'utterances')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Utterances'
+      ? window.shuoshuoComment = { loadComment: loadUtterances }
+      : window.loadOtherComment = loadUtterances
+    return
+  }
+  
+  if ('Giscus' === 'Utterances' || !false) {
+    if (false) btf.loadComment(document.getElementById('utterances-wrap'), loadUtterances)
+    else loadUtterances()
+  } else {
+    window.loadOtherComment = loadUtterances
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/blogs/js/search/local-search.js"></script></div></div></body></html>

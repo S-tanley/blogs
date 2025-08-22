@@ -1,0 +1,382 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>理解 Zero-Shot, One-Shot, 和 Few-Shot 学习 | Stanley's Blog</title><meta name="author" content="Stanley Zheng"><meta name="copyright" content="Stanley Zheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在机器学习，特别是计算机视觉领域，我们经常希望模型能够像人类一样，通过极少量的样本甚至仅仅通过描述就能认识新事物。Zero-Shot, One-Shot, 和 Few-Shot 学习就是旨在实现这一目标的关键技术。这些术语描述了模型在面对一个从未见过的“新类别”时，学习和识别它所需要的样本数量。 基础：在“基类”上预训练 所有这些学习范式都有一个共同的起点：一个在大量标注数据（包含丰富的“基类”或">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解 Zero-Shot, One-Shot, 和 Few-Shot 学习">
+<meta property="og:url" content="https://s-tanley.github.io/blogs/2025/08/16/%E7%90%86%E8%A7%A3%20Zero-Shot,%20One-Shot,%20%E5%92%8C%20Few-Shot%20%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Stanley&#39;s Blog">
+<meta property="og:description" content="在机器学习，特别是计算机视觉领域，我们经常希望模型能够像人类一样，通过极少量的样本甚至仅仅通过描述就能认识新事物。Zero-Shot, One-Shot, 和 Few-Shot 学习就是旨在实现这一目标的关键技术。这些术语描述了模型在面对一个从未见过的“新类别”时，学习和识别它所需要的样本数量。 基础：在“基类”上预训练 所有这些学习范式都有一个共同的起点：一个在大量标注数据（包含丰富的“基类”或">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG">
+<meta property="article:published_time" content="2025-08-16T05:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-16T19:14:11.012Z">
+<meta property="article:author" content="Stanley Zheng">
+<meta property="article:tag" content="CV">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "理解 Zero-Shot, One-Shot, 和 Few-Shot 学习",
+  "url": "https://s-tanley.github.io/blogs/2025/08/16/%E7%90%86%E8%A7%A3%20Zero-Shot,%20One-Shot,%20%E5%92%8C%20Few-Shot%20%E5%AD%A6%E4%B9%A0/",
+  "image": "https://s-tanley.github.io/blogs/img/MyProfilePicture.JPG",
+  "datePublished": "2025-08-16T05:00:00.000Z",
+  "dateModified": "2025-08-16T19:14:11.012Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Stanley Zheng",
+      "url": "https://s-tanley.github.io/blogs/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/blogs/img/favicon.png"><link rel="canonical" href="https://s-tanley.github.io/blogs/2025/08/16/%E7%90%86%E8%A7%A3%20Zero-Shot,%20One-Shot,%20%E5%92%8C%20Few-Shot%20%E5%AD%A6%E4%B9%A0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/blogs/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/blogs/',
+  algolia: undefined,
+  localSearch: {"path":"/blogs/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '理解 Zero-Shot, One-Shot, 和 Few-Shot 学习',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">46</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/blogs/"><img class="site-icon" src="/blogs/img/MyProfilePicture.JPG" alt="Logo"><span class="site-name">Stanley's Blog</span></a><a class="nav-page-title" href="/blogs/"><span class="site-name">理解 Zero-Shot, One-Shot, 和 Few-Shot 学习</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="https://s-tanley.github.io"><i class="fa-fw fas fa-id-badge"></i><span> Stanley Zheng</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blogs/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">理解 Zero-Shot, One-Shot, 和 Few-Shot 学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-08-16T05:00:00.000Z" title="Created 2025-08-16 00:00:00">2025-08-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-08-16T19:14:11.012Z" title="Updated 2025-08-16 14:14:11">2025-08-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/blogs/categories/Research-Blogs/">Research Blogs</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>在机器学习，特别是计算机视觉领域，我们经常希望模型能够像人类一样，通过极少量的样本甚至仅仅通过描述就能认识新事物。Zero-Shot, One-Shot, 和 Few-Shot 学习就是旨在实现这一目标的关键技术。这些术语描述了模型在面对一个从未见过的“新类别”时，学习和识别它所需要的样本数量。</p>
+<h3 id="基础：在“基类”上预训练">基础：在“基类”上预训练</h3>
+<p>所有这些学习范式都有一个共同的起点：一个在大量标注数据（包含丰富的“基类”或“可见类”，Seen Classes）上预训练好的模型。这个预训练阶段的目的并非让模型记住这些基类，而是让它学习到一种通用的、可迁移的能力，例如：</p>
+<ol>
+<li>学会提取鲁棒且有意义的视觉特征。</li>
+<li>学会如何“学习”和“比较”（即元学习或度量学习）。</li>
+<li>学会关联图像的视觉空间和文字的语义空间。</li>
+</ol>
+<p>有了这个强大的预训练模型作为基础，我们才能讨论它如何应对“未见类别”。</p>
+<h3 id="Zero-Shot-Learning-零样本学习">Zero-Shot Learning (零样本学习)</h3>
+<p>当模型需要识别一个新类别，但<strong>没有任何</strong>（K=0）该类别的图像样本时，我们称之为零样本学习。</p>
+<p>工作原理：</p>
+<p>既然没有图像样本，模型依赖于辅助的语义信息 (Semantic Information) 来进行推理。这些信息为模型提供了关于新类别的描述性知识。</p>
+<ul>
+<li><strong>学习依据</strong>：通常是类别的<strong>属性描述</strong>（例如，“斑马”的属性是“有条纹”、“像马”、“黑白色”）或<strong>词向量</strong>（Word Vectors）。</li>
+<li><strong>核心能力</strong>：<strong>视觉-语义匹配</strong>。模型必须是经过特殊设计的（例如，像CLIP这样的视觉-语言模型），它能够将输入图像的视觉特征，与不同类别的文字描述进行匹配，并找出匹配度最高的那个作为预测结果。</li>
+<li><strong>关键点</strong>：一个标准的图像分类器（如在ImageNet上训练的ResNet）无法直接进行零样本学习，因为它不具备将视觉特征与任意语义描述关联的能力。</li>
+</ul>
+<p>简而言之，零样本学习是给模型一本“字典”（语义描述），让它去识别一本没有插图的“书”（新类别的图像）。</p>
+<h3 id="One-Shot-与-Few-Shot-学习-一样本与小样本学习">One-Shot 与 Few-Shot 学习 (一样本与小样本学习)</h3>
+<p>当模型在识别新类别时，被允许接触少量标注样本时，我们称之为小样本学习。</p>
+<ul>
+<li><strong>One-Shot Learning (K=1)</strong>：为每个新类别提供<strong>一个</strong>标注样本。</li>
+<li><strong>Few-Shot Learning (K&gt;1)</strong>：为每个新类别提供<strong>少数几个</strong>（K个，通常K很小，如5或10）标注样本。</li>
+</ul>
+<p><strong>核心区别：并非Fine-tuning，而是“比对”</strong></p>
+<p>一个常见的误区是认为 One-Shot/Few-Shot 学习就是用这 K 个样本对预训练模型进行微调 (Fine-tuning)。这种做法通常是不可行的，因为它会导致两个严重问题：</p>
+<ol>
+<li><strong>灾难性遗忘 (Catastrophic Forgetting)</strong>：模型会忘记在预训练阶段学到的通用知识。</li>
+<li><strong>严重过拟合 (Severe Overfitting)</strong>：模型会完美记住这 K 个样本的全部细节，但无法泛化到同类别其他稍有不同的图像上。</li>
+</ol>
+<p>正确的范式是<strong>度量学习 (Metric Learning)</strong> 或<strong>元学习 (Meta-Learning)</strong>。在这个范式中，预训练模型的<strong>权重在测试阶段是冻结的</strong>，不进行更新。</p>
+<ul>
+<li><strong>学习依据</strong>：提供的 K 个标注样本被用作**“参考样本” (Support Samples)**。</li>
+<li><strong>核心能力</strong>：<strong>特征相似度比较</strong>。模型作为一个强大的特征提取器和比较器，它会提取“查询样本”（待分类的图片）和“参考样本”的特征，并通过计算它们在特征空间中的距离来判断它们是否属于同一类别。</li>
+</ul>
+<p>一个很好的类比是人脸识别系统：系统通过学习数百万张人脸，掌握了“比较两张脸是否为同一个人”的能力（预训练）。当你录入一个新的人脸时，只需一张照片（One-Shot），系统会将其特征存为参考，而不会重新训练整个网络。之后，它通过比较新照片与参考照片的特征相似度来进行识别。</p>
+<h3 id="总结对比">总结对比</h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Zero-Shot Learning (零样本)</th>
+<th>One-Shot Learning (一样本)</th>
+<th>Few-Shot Learning (小样本)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>提供的新类别样本数 (K)</strong></td>
+<td>K = 0</td>
+<td>K = 1</td>
+<td>K &gt; 1 (通常很小)</td>
+</tr>
+<tr>
+<td><strong>学习依据</strong></td>
+<td>语义描述、属性、词向量</td>
+<td>1个标注的参考样本</td>
+<td>K个标注的参考样本</td>
+</tr>
+<tr>
+<td><strong>核心能力</strong></td>
+<td>视觉-语义关联与匹配</td>
+<td>特征相似度比较</td>
+<td>更鲁棒的特征相似度比较</td>
+</tr>
+<tr>
+<td><strong>模型权重 (测试阶段)</strong></td>
+<td>冻结</td>
+<td>通常冻结</td>
+<td>通常冻结</td>
+</tr>
+</tbody>
+</table>
+<p>这些技术使得AI模型更加灵活和数据高效，向着仅需少量信息就能学习和泛化的目标迈出了重要一步，对于处理现实世界中类别众多且样本稀疏的场景至关重要。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs">Stanley Zheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://s-tanley.github.io/blogs/2025/08/16/%E7%90%86%E8%A7%A3%20Zero-Shot,%20One-Shot,%20%E5%92%8C%20Few-Shot%20%E5%AD%A6%E4%B9%A0/">https://s-tanley.github.io/blogs/2025/08/16/理解 Zero-Shot, One-Shot, 和 Few-Shot 学习/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blogs/tags/CV/">CV</a></div><div class="post-share"><div class="social-share" data-image="/blogs/img/MyProfilePicture.JPG" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/blogs/2025/08/14/Notes---%E8%8B%8F%E5%89%91%E6%9E%97%E5%8D%9A%E5%AE%A2%EF%BC%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%EF%BC%89/" title="Notes---苏剑林博客（词向量与Embedding技术）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Notes---苏剑林博客（词向量与Embedding技术）</div></div><div class="info-2"><div class="info-item-1">这一篇 Notes 就是关于“词向量与Embedding技术”这个分类底下的 Blog，这个是第二个部分。 词向量与Embedding究竟是怎么回事？ 词向量可以说是语言模型最重要的基石之一，正是有了词向量，我们才有了一个比较好的方式来用数字表示语言。从某种意义上讲，语言到词向量的过程，就是把人类语言翻译成机器语言的过程。 我第一次知道词向量，差不多是 2023 年左右，我大二左右，然后要上物理 </div></div></div></a><a class="pagination-related" href="/blogs/2025/08/21/Using%20Clip%20to%20Music%20Generation/" title="Using Clip to Music Generation"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Using Clip to Music Generation</div></div><div class="info-2"><div class="info-item-1">最近看到了 CLIP，CLIP 应该算是多模态，或者算是 CV 那边的工作，但是我看到了非常多的把 CLIP 用到自己领域去做的文章，而且 CLIP 又很简单，最重要的一点是可以直接做 Zero-shot，我觉得我们可以直接尝试把 CLIP 模型用到我现在的这个 Music accompaniment generation 里。 </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/blogs/2025/07/12/%E6%A0%87%E5%87%86%E5%8D%B7%E7%A7%AF%E8%BF%87%E7%A8%8B/" title="标准卷积过程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-12</div><div class="info-item-2">标准卷积过程</div></div><div class="info-2"><div class="info-item-1">在看 MLSys 相关的东西的时候，经常能看到准对卷积操作做的优化，但是我总是忘卷积操作具体是怎么做的，在这里记一下。 标准卷积计算过程  输入图片的维度：  一张彩色图片通常有三个维度：高度 (H) x 宽度 (W) x 输入通道数 (C_in)。对于 RGB 图片，C_in 通常是 3。   单个卷积核的维度：  一个卷积核（或称为滤波器）的完整形状是 核高 (K_H) x 核宽 (K_W) x 输入通道数 (C_in)。 例如，如果输入图片有 3 个通道（RGB），并且你使用 3×3 的卷积核，那么一个卷积核的实际形状是 3×3×3。它包含了对应每个输入通道的 3×3 切片。   卷积操作的内部过程：  当一个卷积核在输入图片的某个局部区域滑动时，它会进行以下操作：  逐通道相乘： 卷积核的每个切片会与输入图片对应通道的局部区域进行逐元素的乘法。 求和： 将所有通道上（例如 RGB...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Giscus</span><span id="switch-btn"></span><span class="second-comment">Utterances</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="utterances-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/blogs/img/MyProfilePicture.JPG" onerror="this.onerror=null;this.src='/blogs/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Stanley Zheng</div><div class="author-info-description">Hi, I am Stanley. I am currently a CS student in the University of Wisconsin-Madison. </div><div class="site-data"><a href="/blogs/archives/"><div class="headline">Articles</div><div class="length-num">46</div></a><a href="/blogs/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/blogs/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/S-tanley"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://s-tanley.github.io" target="_blank" title="Homepage"><i class="fas fa-id-badge" style="color: #808080;"></i></a><a class="social-icon" href="https://github.com/S-tanley" target="_blank" title="Github"><i class="fab fa-github" style="color: #808080;"></i></a><a class="social-icon" href="mailto:zbowen936@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #808080;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%9C%A8%E2%80%9C%E5%9F%BA%E7%B1%BB%E2%80%9D%E4%B8%8A%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="toc-number">1.</span> <span class="toc-text">基础：在“基类”上预训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Zero-Shot-Learning-%E9%9B%B6%E6%A0%B7%E6%9C%AC%E5%AD%A6%E4%B9%A0"><span class="toc-number">2.</span> <span class="toc-text">Zero-Shot Learning (零样本学习)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#One-Shot-%E4%B8%8E-Few-Shot-%E5%AD%A6%E4%B9%A0-%E4%B8%80%E6%A0%B7%E6%9C%AC%E4%B8%8E%E5%B0%8F%E6%A0%B7%E6%9C%AC%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.</span> <span class="toc-text">One-Shot 与 Few-Shot 学习 (一样本与小样本学习)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E5%AF%B9%E6%AF%94"><span class="toc-number">4.</span> <span class="toc-text">总结对比</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/21/Using%20Clip%20to%20Music%20Generation/" title="Using Clip to Music Generation">Using Clip to Music Generation</a><time datetime="2025-08-21T05:00:00.000Z" title="Created 2025-08-21 00:00:00">2025-08-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/16/%E7%90%86%E8%A7%A3%20Zero-Shot,%20One-Shot,%20%E5%92%8C%20Few-Shot%20%E5%AD%A6%E4%B9%A0/" title="理解 Zero-Shot, One-Shot, 和 Few-Shot 学习">理解 Zero-Shot, One-Shot, 和 Few-Shot 学习</a><time datetime="2025-08-16T05:00:00.000Z" title="Created 2025-08-16 00:00:00">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/14/Notes---%E8%8B%8F%E5%89%91%E6%9E%97%E5%8D%9A%E5%AE%A2%EF%BC%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%EF%BC%89/" title="Notes---苏剑林博客（词向量与Embedding技术）">Notes---苏剑林博客（词向量与Embedding技术）</a><time datetime="2025-08-14T05:00:00.000Z" title="Created 2025-08-14 00:00:00">2025-08-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/11/Notes---%E8%8B%8F%E5%89%91%E6%9E%97%E5%8D%9A%E5%AE%A2%EF%BC%88%E8%AF%8D%E5%90%91%E9%87%8F%E4%B8%8EEmbedding%E6%8A%80%E6%9C%AF%EF%BC%89/" title="Notes---苏剑林博客（神经网络与深度学习基础）">Notes---苏剑林博客（神经网络与深度学习基础）</a><time datetime="2025-08-11T05:00:00.000Z" title="Created 2025-08-11 00:00:00">2025-08-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/blogs/2025/08/05/%E5%A4%9A%E6%A8%A1%E6%80%81%E4%B8%AD%E7%9A%84%20Single%20String%20%E4%B8%8E%20Two%20String/" title="多模态中的 Single String 与 Two String">多模态中的 Single String 与 Two String</a><time datetime="2025-08-05T05:00:00.000Z" title="Created 2025-08-05 00:00:00">2025-08-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Stanley Zheng</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/blogs/js/utils.js"></script><script src="/blogs/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"data-mapping":"pathname","data-input-position":"top","data-reactions-enabled":1,"data-strict":1}
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'S-tanley/blogs',
+      'data-repo-id': 'R_kgDOOPJb6Q',
+      'data-category-id': 'DIC_kwDOOPJb6c4CohlA',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+  const getUtterancesTheme = theme => theme === 'dark' ? 'photon-dark' : 'github-light'
+
+  const loadUtterances = (el = document, key) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyUtterances = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const config = {
+      src: 'https://utteranc.es/client.js',
+      repo: 'S-tanley/blogs',
+      theme: getUtterancesTheme(document.documentElement.getAttribute('data-theme')),
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      'issue-term': isShuoshuo ? key : (option && option['issue-term']) || 'pathname'
+    }
+
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => ele.setAttribute(key, value))
+    el.querySelector('#utterances-wrap').appendChild(ele)
+  }
+
+  const changeUtterancesTheme = theme => {
+    const iframe = document.querySelector('#utterances-wrap iframe')
+    if (iframe) {
+      const message = {
+        type: 'set-theme',
+        theme: getUtterancesTheme(theme)
+      };
+      iframe.contentWindow.postMessage(message, 'https://utteranc.es')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeUtterancesTheme, 'utterances')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Utterances'
+      ? window.shuoshuoComment = { loadComment: loadUtterances }
+      : window.loadOtherComment = loadUtterances
+    return
+  }
+  
+  if ('Giscus' === 'Utterances' || !false) {
+    if (false) btf.loadComment(document.getElementById('utterances-wrap'), loadUtterances)
+    else loadUtterances()
+  } else {
+    window.loadOtherComment = loadUtterances
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/blogs/js/search/local-search.js"></script></div></div></body></html>

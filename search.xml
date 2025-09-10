@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Notes---Operating Systems: Three Easy Piece（UW-Madison CS 537）</title>
+      <link href="/blogs/2025/09/09/Notes---Operating%20Systems:%20Three%20Easy%20Piece%EF%BC%88UW-Madison%20CS%20537%EF%BC%89/"/>
+      <url>/blogs/2025/09/09/Notes---Operating%20Systems:%20Three%20Easy%20Piece%EF%BC%88UW-Madison%20CS%20537%EF%BC%89/</url>
+      
+        <content type="html"><![CDATA[<p>UW-Madison 的 system 其实非常强，CS 537 是讲 operation system 的一节课，“Operating Systems: Three Easy Piece” 是这门课的教材，这篇 Blog 就主要记载我阅读这本 textbook 的 reading notes。</p><h2 id="Chapter-2-Introduction-to-Operating-Systems">Chapter 2: Introduction to Operating Systems</h2><h2 id="Chapter-4-The-Abstraction-The-Process">Chapter 4: The Abstraction: The Process</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> Study Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> notes </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Using Clip to Music Generation</title>
       <link href="/blogs/2025/08/21/Using%20Clip%20to%20Music%20Generation/"/>
       <url>/blogs/2025/08/21/Using%20Clip%20to%20Music%20Generation/</url>
@@ -1083,31 +1108,6 @@
     
     
     <entry>
-      <title>一个 CS 大三学生的碎碎念</title>
-      <link href="/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89%20CS%20%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/"/>
-      <url>/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89%20CS%20%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/</url>
-      
-        <content type="html"><![CDATA[<p>在这里随便写点东西，做一个小小的总结吧。</p><p>感觉这三年学了很多东西，但还是很迷茫，不知道以后应该干什么。马上就大四了，感觉工作也找不到，博士也很难伸到，暑研也伸不到，唯一感觉做的比较好的就是绩点维持的挺好，而且大部分课都是有比较认真的学，确实是会了一些东西，但感觉都很理论，也不知道怎么用。找工作的时候需要的技术栈基本都不会，或者只会一点皮毛，真的遇到大型项目就啥也不会，也无从下手；找 research 也是，要读很多导师方向的论文，感觉之前学的一些东西也基本用不上，就感觉很多东西都匹配不上。但其实也没什么可抱怨的，毕竟感觉自己确实是有点三天打鱼两天晒网，很多东西想要自学但是从没有坚持做完过，虽然已经快大四了，感觉再开始自学一些东西已经有点晚了，但还是希望自己在最后一年真的完整的自学完几门网课，毕竟现在感觉已经明确了自己未来的方向了，就不能在松懈了。</p><p>最近也看到了很多大佬的总结，感觉大部分都是大一大二就已经很强，至少也是有明确道路了，空闲时间大部分都在提升自己的技术。我大一的时候在想，刚上大学，不用对自己太苛刻。应该只有在上大学之前的暑假系统的学了一下C语言，又因为要 transfer，要学托福，这个占用了很多的时间，包括大一到大二的暑假，还有大二的寒假。最后 transfer 来到 UW-Madison，还是很喜欢这个学校的，发现学业压力甚至更重了，因为要上很多之前上过的课，我又傻傻的 double 了一个 STAT 的 major。其实根本不应该 double，当时觉得学一学 STAT 的课很不错，但其实 CS 有那么多的方向可以去学，真的没必要再去涉猎 STAT。于是乎，现在就导致我没有一门精的。</p><p>25 Spring 这个学期可以说是我压力最大的一个学期，因为我找了一个 remote intern，还有一个 remote research。但是发现如果去找工，自己的技术根本不够用，但是又因为这个 intern 占据了我一定的时间，再加上学业上真的压力很重，我这个学期连续5周，每周至少一个 midterm，放了一个一周的 Spring break，回来之后又是连着两周有考试，在之后两周就就是 final。Remote research 导师人也很放羊，但不得不说导师我感觉人很好了，毕竟我确实啥也不会，也愿意跟我meeting 一下，给我一些 paper list，虽然也不花太多时间吧，但我感觉还是挺好的。这样毕竟压力很小，导致我基本没有进展，因为更多的时间都花在了另外两项上。如果硬要说的话，一天我差不多有 10 - 12 个小时是可以用来做事情的，如果这 10 - 12 个小时，我一分钟都不玩，我觉得确实可以同时 handle 这三项，但是太难了，我唯一的娱乐就是踢球，或者看小说，真的确实是做不到一点娱乐都没有。这就导致确实没办法平衡好，😮‍💨，还是太菜了。而且我这个 remote intern，给我的心里压力比较大，虽然我当时就是随机投了一个，然后也是 unpaid，但是当时确实是有承诺会好好做，感觉也没有做的很好，有的时候就感觉压力很大，因为会有自己没有说到做到的内疚。</p><p>但毕竟也不是完全没有收获，我感觉至少我未来的学习方向清晰了一点，要系统的学一学前端；其次就是学一学 HPC，disturbed sys，并行计算方向的课程；最后就是从假期开始每日一题，在做题的同时学一学算法。</p><p>这个暑假一定要好好利用好💪，不能在空耗时间了，给自己狠狠的立 flag。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Life Blogs </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 随笔 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>建立个人 Blog 网站</title>
       <link href="/blogs/2025/03/25/%E5%BB%BA%E7%AB%8B%E4%B8%AA%E4%BA%BABlog%E7%BD%91%E7%AB%99/"/>
       <url>/blogs/2025/03/25/%E5%BB%BA%E7%AB%8B%E4%B8%AA%E4%BA%BABlog%E7%BD%91%E7%AB%99/</url>
@@ -1127,6 +1127,31 @@
             <tag> Web </tag>
             
             <tag> Personal Blog Website </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>一个 CS 大三学生的碎碎念</title>
+      <link href="/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89%20CS%20%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/"/>
+      <url>/blogs/2025/03/25/%E4%B8%80%E4%B8%AA%E5%A4%A7%E4%B8%89%20CS%20%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A2%8E%E7%A2%8E%E5%BF%B5/</url>
+      
+        <content type="html"><![CDATA[<p>在这里随便写点东西，做一个小小的总结吧。</p><p>感觉这三年学了很多东西，但还是很迷茫，不知道以后应该干什么。马上就大四了，感觉工作也找不到，博士也很难伸到，暑研也伸不到，唯一感觉做的比较好的就是绩点维持的挺好，而且大部分课都是有比较认真的学，确实是会了一些东西，但感觉都很理论，也不知道怎么用。找工作的时候需要的技术栈基本都不会，或者只会一点皮毛，真的遇到大型项目就啥也不会，也无从下手；找 research 也是，要读很多导师方向的论文，感觉之前学的一些东西也基本用不上，就感觉很多东西都匹配不上。但其实也没什么可抱怨的，毕竟感觉自己确实是有点三天打鱼两天晒网，很多东西想要自学但是从没有坚持做完过，虽然已经快大四了，感觉再开始自学一些东西已经有点晚了，但还是希望自己在最后一年真的完整的自学完几门网课，毕竟现在感觉已经明确了自己未来的方向了，就不能在松懈了。</p><p>最近也看到了很多大佬的总结，感觉大部分都是大一大二就已经很强，至少也是有明确道路了，空闲时间大部分都在提升自己的技术。我大一的时候在想，刚上大学，不用对自己太苛刻。应该只有在上大学之前的暑假系统的学了一下C语言，又因为要 transfer，要学托福，这个占用了很多的时间，包括大一到大二的暑假，还有大二的寒假。最后 transfer 来到 UW-Madison，还是很喜欢这个学校的，发现学业压力甚至更重了，因为要上很多之前上过的课，我又傻傻的 double 了一个 STAT 的 major。其实根本不应该 double，当时觉得学一学 STAT 的课很不错，但其实 CS 有那么多的方向可以去学，真的没必要再去涉猎 STAT。于是乎，现在就导致我没有一门精的。</p><p>25 Spring 这个学期可以说是我压力最大的一个学期，因为我找了一个 remote intern，还有一个 remote research。但是发现如果去找工，自己的技术根本不够用，但是又因为这个 intern 占据了我一定的时间，再加上学业上真的压力很重，我这个学期连续5周，每周至少一个 midterm，放了一个一周的 Spring break，回来之后又是连着两周有考试，在之后两周就就是 final。Remote research 导师人也很放羊，但不得不说导师我感觉人很好了，毕竟我确实啥也不会，也愿意跟我meeting 一下，给我一些 paper list，虽然也不花太多时间吧，但我感觉还是挺好的。这样毕竟压力很小，导致我基本没有进展，因为更多的时间都花在了另外两项上。如果硬要说的话，一天我差不多有 10 - 12 个小时是可以用来做事情的，如果这 10 - 12 个小时，我一分钟都不玩，我觉得确实可以同时 handle 这三项，但是太难了，我唯一的娱乐就是踢球，或者看小说，真的确实是做不到一点娱乐都没有。这就导致确实没办法平衡好，😮‍💨，还是太菜了。而且我这个 remote intern，给我的心里压力比较大，虽然我当时就是随机投了一个，然后也是 unpaid，但是当时确实是有承诺会好好做，感觉也没有做的很好，有的时候就感觉压力很大，因为会有自己没有说到做到的内疚。</p><p>但毕竟也不是完全没有收获，我感觉至少我未来的学习方向清晰了一点，要系统的学一学前端；其次就是学一学 HPC，disturbed sys，并行计算方向的课程；最后就是从假期开始每日一题，在做题的同时学一学算法。</p><p>这个暑假一定要好好利用好💪，不能在空耗时间了，给自己狠狠的立 flag。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Life Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 随笔 </tag>
             
         </tags>
       

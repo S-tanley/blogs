@@ -54,6 +54,31 @@
     
     
     <entry>
+      <title>Operating Systems Notes: The Path to the Kernel</title>
+      <link href="/blogs/2025/10/12/Operating%20Systems%20Notes:%20The%20Path%20to%20the%20Kernel/"/>
+      <url>/blogs/2025/10/12/Operating%20Systems%20Notes:%20The%20Path%20to%20the%20Kernel/</url>
+      
+        <content type="html"><![CDATA[<h3 id="Operating-Systems-Notes-The-Path-to-the-Kernel"><strong>Operating Systems Notes: The Path to the Kernel</strong></h3><h4 id="1-核心概念与关系"><strong>1. 核心概念与关系</strong></h4><ul><li><strong>Interrupt (中断)</strong>: <strong>异步</strong>事件，由<strong>外部硬件</strong>（键盘、网卡、定时器）触发。它的发生与程序执行流无关。<ul><li><em>比喻</em>: 外来的电话打断了你当前的工作。</li></ul></li><li><strong>Trap (陷阱)</strong>: <strong>同步</strong>事件，由<strong>内部软件</strong>（当前正在执行的指令）<strong>主动</strong>触发。它是可预测的，是程序逻辑的一部分。<ul><li><em>比喻</em>: 你在工作中遇到一个需要老板审批的环节，于是你主动放下工作去敲老板的门。</li></ul></li><li><strong>Exception (异常)</strong>: <strong>同步</strong>事件，由<strong>内部软件</strong>执行<strong>出错</strong>时<strong>被动</strong>触发。<ul><li><em>比喻</em>: 你在工作中算错了一个数字，导致流程无法继续，被动地需要老板介入。</li></ul></li><li><strong>System Call (系统调用)</strong>: 一个<strong>高层概念</strong>，是操作系统提供给用户程序的服务接口（如读写文件、创建进程）。它不是一个硬件机制。</li></ul><p><strong>最重要的关系</strong>: <strong>用户程序通过主动触发一次 <code>Trap</code> 来向内核发起一次 <code>System Call</code> 请求。</strong> Trap 是实现 System Call 的底层机制。</p><h4 id="2-int-指令的“身份”之谜"><strong>2. <code>int</code> 指令的“身份”之谜</strong></h4><ul><li><strong><code>int</code> 指令是 Trap</strong>: 尽管它的名字叫 <code>int</code> (interrupt)，但它的行为（软件触发、同步发生）完全符合 <strong>Trap</strong> 的定义。</li><li><strong>为什么叫 <code>int</code></strong>: 因为它在硬件层面<strong>复用</strong>了与硬件中断相同的处理机制（中断描述符表 IDT）。</li><li><strong><code>int</code> 的多样性</strong>:<ul><li><code>int 0x80</code>: 在32位Linux上，是<strong>发起系统调用</strong>的传统方式。</li><li><code>int 3</code>: 用于<strong>调试断点</strong>。</li><li><code>int 0</code>: 用于处理<strong>除零异常</strong>。</li><li>结论: <strong>并非所有 <code>int</code> 触发的陷阱都是为了系统调用。</strong></li></ul></li></ul><h4 id="3-一次完整系统调用的生命周期"><strong>3. 一次完整系统调用的生命周期</strong></h4><p>这是一个从用户空间到内核空间再返回的完整旅程：</p><ol><li><strong>用户空间 (User Space)</strong>: 程序调用一个库函数，如 <code>write()</code>。</li><li><strong>C 库包装 (Wrapper)</strong>: 执行流进入C标准库（<code>glibc</code>）。这个包装函数负责准备工作：<ul><li>将<strong>系统调用编号</strong>放入约定好的寄存器（如 <code>%rax</code>）。</li><li>将<strong>函数参数</strong>放入其他寄存器。</li></ul></li><li><strong>触发陷阱 (Trigger Trap)</strong>: 包装函数执行一条特殊指令来陷入内核。<ul><li><strong>经典方式</strong>: <code>int 0x80</code></li><li><strong>现代方式</strong>: <code>syscall</code></li></ul></li><li><strong>模式切换 (Mode Switch)</strong>: CPU硬件响应陷阱指令，自动完成：<ul><li>暂停用户程序。</li><li><strong>切换到内核模式 (Kernel Mode)</strong>。</li><li>查找并跳转到内核的陷阱处理程序入口。</li></ul></li><li><strong>内核空间 (Kernel Space)</strong>:<ul><li>内核的陷阱处理程序首先接管。</li><li>它从 <code>%rax</code> 寄存器中读取<strong>系统调用编号</strong>。</li><li>使用该编号作为索引，在<strong>系统调用表 (System Call Table)</strong> 中查找并调用真正的内核函数（如 <code>sys_write()</code>）。</li><li><code>sys_write()</code> 执行特权操作。</li></ul></li><li><strong>返回 (Return)</strong>:<ul><li>内核函数执行完毕，将<strong>返回值</strong>存入寄存器。</li><li>内核执行 <code>sysret</code> 或 <code>iret</code> 指令，触发硬件<strong>切换回用户模式</strong>。</li><li>用户程序从陷阱指令之后的地方恢复执行。</li></ul></li><li><strong>回到用户空间</strong>: C 库包装函数从寄存器中取回返回值，并将其返回给调用者。</li></ol><h4 id="4-syscall-vs-int-0x80：效率的进化"><strong>4. <code>syscall</code> vs. <code>int 0x80</code>：效率的进化</strong></h4><ul><li><strong>共同点</strong>: 两者都是<strong>触发陷阱</strong>的指令，目的都是为了发起系统调用。进入内核后，确定具体调用的方式（查 <code>%rax</code> 寄存器）是<strong>一样的</strong>。</li><li><strong>区别 (效率)</strong>:<ul><li><strong><code>int 0x80</code></strong>: 走通用的中断处理路径，需要查询<strong>中断描述符表 (IDT)</strong>，开销稍大。<ul><li><em>比喻</em>: 去政府大楼的总咨询台问路，再被指引到正确的部门。</li></ul></li><li><strong><code>syscall</code></strong>: 走为系统调用优化的专用硬件路径，直接读取<strong>CPU专用寄存器 (MSR)</strong> 来找到入口地址，开销极小。<ul><li><em>比喻</em>: 直接用专线电话打给目标部门的负责人，跳过了总咨询台。</li></ul></li></ul></li></ul><p><strong>结论</strong>: <code>syscall</code> 是一个更高效的“陷阱触发器”，但它并没有改变“陷阱 -&gt; 查编号 -&gt; 执行”这个基本流程。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Study Blogs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Operating System </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>置信区间 (CI) vs. 预测区间 (PI)</title>
       <link href="/blogs/2025/10/06/%E7%BD%AE%E4%BF%A1%E5%8C%BA%E9%97%B4%20(CI)%20vs.%20%E9%A2%84%E6%B5%8B%E5%8C%BA%E9%97%B4%20(PI)/"/>
       <url>/blogs/2025/10/06/%E7%BD%AE%E4%BF%A1%E5%8C%BA%E9%97%B4%20(CI)%20vs.%20%E9%A2%84%E6%B5%8B%E5%8C%BA%E9%97%B4%20(PI)/</url>
